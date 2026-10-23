@@ -5,9 +5,9 @@ test('Seven sections are declared',()=>{
  const s=readFileSync('src/lib/modules.ts','utf8');
  for (const route of ['resumen','prospectos','proyectos','cotizaciones','tareas','finanzas','jose-luis']) assert.match(s,new RegExp("slug:'"+route+"'"));
 });
-test('No live user or customer connection',()=>{
+test('No business records are exposed in the auth preview',()=>{
  const file=readFileSync('src/app/api/health/route.ts','utf8');
- assert.match(file,/preview-no-data/);
+ assert.match(file,/auth-enabled-no-business-data/);
 });
 test('Indexing disabled',()=>{
  const c=readFileSync('next.config.ts','utf8');
