@@ -16,13 +16,8 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '22'
-      - name: Generate lockfile during initial bootstrap
-        run: npm install --package-lock-only --ignore-scripts --no-audit
-      - name: Install with generated lockfile
+      - name: Install from committed lockfile
         run: npm ci
-      - name: Export bootstrap lockfile for reproducible pinning
-        run: |
-          node -e "const fs=require('node:fs'); const b=fs.readFileSync('package-lock.json').toString('base64'); console.log('ANDRAI_LOCK_BEGIN'); for(let i=0;i<b.length;i+=2048)console.log(b.slice(i,i+2048)); console.log('ANDRAI_LOCK_END');"
       - name: Validate
         run: npm run lint && npm run typecheck && npm run test && npm run build
       - name: Review dependency security
