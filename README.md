@@ -17,7 +17,7 @@ npm run test
 npm run build
 ```
 
-Until a reviewed package lock exists, package resolution is not reproducible. Generate and commit `package-lock.json` after validating dependency resolution on a trusted machine or CI.
+Dependencies are pinned by the committed `package-lock.json` generated from a green CI run. Use `npm ci` for reproducible installation; pull requests must pass lint, TypeScript, tests, build and npm audit.
 
 ## Security & product boundaries
 - Production/customer data unavailable by design.
