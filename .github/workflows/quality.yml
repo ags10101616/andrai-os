@@ -1,0 +1,24 @@
+name: ANDRAI OS / OS-01 Quality
+on:
+  push:
+    branches: [main, "feature/**"]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Install from committed lockfile
+        run: npm ci
+      - name: Validate
+        run: npm run lint && npm run typecheck && npm run test && npm run build
+      - name: Review dependency security
+        run: npm audit --audit-level=high
