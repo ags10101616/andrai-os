@@ -1,15 +1,16 @@
-# ANDRAI OS — OS-01 Next.js Preview
+# ANDRAI OS — OS-02 Authenticated Workspace Preview
 
-Private workspace foundation: seven navigable modules, Spectral Ember design, empty-state copy and a read-only health endpoint.
+Private workspace foundation: seven modules behind Supabase Auth, verified server-side membership and role permissions, Spectral Ember design, no commercial data and a read-only health endpoint.
 
-**This is an OS-01 visual/technical preview, NOT a live agency system.** No Supabase credentials, accounts, CRM customers, invoices, real analytics or autonomous AI are connected here.
+**This is an OS-02 private-auth preview, NOT a live CRM.** Supabase Auth and staff membership are connected; customers, projects, invoices and autonomous AI are NOT. The GitHub repository remains public temporarily; do not commit secrets or real customer data.
 
 ## Stack
-Next.js 16 App Router, React 19, TypeScript 6, Tailwind 4 / CSS, Node 22.
+Next.js 16 App Router, React 19, TypeScript 6, Supabase SSR and auth/RLS, Tailwind 4 / CSS, Node 22.
 
 ## Start
 ```bash
-npm install
+npm ci
+# configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY in .env.local
 npm run dev
 npm run lint
 npm run typecheck
@@ -23,5 +24,5 @@ Dependencies are pinned by the committed `package-lock.json` generated from a gr
 - Production/customer data unavailable by design.
 - Every page includes noindex robots headers.
 - Preview deployment should remain protected by Vercel Authentication.
-- OS-02 covers authentication and real Supabase/roles. OS-03 covers transactional data integrity.
+- OS-02 covers authentication and real Supabase staff/roles. OS-03 covers transactional data integrity. Supabase email/password recovery, admin invites, leaked-password protection and independent signed-in role E2E remain release gates.
 - This is separate from the marketing website and commercial Andrai CRM.
