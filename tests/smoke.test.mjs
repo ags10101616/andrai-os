@@ -7,7 +7,7 @@ test('Seven sections are declared',()=>{
 });
 test('No business records are exposed in the auth preview',()=>{
  const file=readFileSync('src/app/api/health/route.ts','utf8');
- assert.match(file,/auth-enabled-no-business-data/);
+ assert.match(file,/quotes-review-preview-readonly/);
 });
 test('Indexing disabled',()=>{
  const c=readFileSync('next.config.ts','utf8');

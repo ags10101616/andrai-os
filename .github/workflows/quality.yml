@@ -22,3 +22,11 @@ jobs:
         run: npm run lint && npm run typecheck && npm run test && npm run build
       - name: Review dependency security
         run: npm audit --audit-level=high
+      - name: Upload synthetic PDF QA sample
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: os07-quote-pdf-qa
+          path: tests/artifacts/os07-quote-sample.pdf
+          if-no-files-found: ignore
+          retention-days: 1
