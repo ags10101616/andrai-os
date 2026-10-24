@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {parseAgentBrief} from '../src/lib/agent/brief.ts';
+import {parseAgentBrief} from '../src/lib/agent/model.ts';
 import {canVisit,isWorkspacePath} from '../src/lib/auth/roles.ts';
 
 const example={
