@@ -1,6 +1,6 @@
 # OS-12 · José Luis Dot Account & Read-Only Agent Workspace
 
-**Status:** independent Auth invitation accepted, confirmed account **ACTIVE** and bound to dedicated agent identity. Protected Vercel deployment and real dot-browser E2E still pending.
+**Status:** agent Auth identity ACTIVE; protected Vercel preview rebuilt and signed-out routes VERIFIED. Real dot-browser sign-in E2E remains pending.
 **Branch:** `feature/os-12` (draft PR #12).
 **Capability:** `brief_read` only. **No autonomous actions or human staff permissions.**
 
@@ -42,13 +42,13 @@ José Luis is a ChatGPT dot; he does not share the owner's Supabase Auth account
 ## Not yet proven
 
 - Dot's **own** cloud-browser sign-in to ANDRAI OS. Auth acceptance in the owner's browser is not an authenticated dot-browser E2E.
-- Current OS-12 preview deployment was built before branch environment variables were configured. Signed-out protected routes returned 503 and access diagnostics 500.
-- Vercel API refused forced redeployment due to daily free deployment quota. The preview is **NOT YET READY** to hand to José Luis; rebuild and retest after quota availability.
+- Initial OS-12 preview was built before the branch environment variables existed and returned 503/500 on protected routes. This was resolved by a later automatic Git deployment, verified READY with the correct Supabase env.
+- Signed-out checks now pass: /login HTTP 200, /diagnostico-acceso HTTP 200 showing no session, and /agente, /equipo, /finanzas redirect to login rather than exposing protected data. A real *agent browser* login still has not been tested.
 - GitHub repo remains public by owner's preference. No private customer records or tokens belong there.
 - Independent staging backup/restore, password leak protection, role E2E and device access remain launch gates.
 - Any future agent proposals require typed review and owner approval under OS-13; OS-12 has no sending or execution tools.
 
-## Next secure login step (after Vercel rebuild)
+## Next secure login step (preview rebuilt)
 
 Start work in the José Luis dot, use his own cloud browser to open the protected OS-12 login page; owner takes over the browser to sign in with the *agent* account and completes MFA. Return control to the dot. Confirm `/diagnostico-acceso` shows agent authorization and `/agente` renders the five counts. Verify that `/finanzas`, `/equipo`, ordinary CRM rows, owner CSV/PDF and server admin endpoints remain denied. Never send passwords or cookies through Chat.
 

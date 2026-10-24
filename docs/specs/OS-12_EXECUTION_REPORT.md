@@ -2,7 +2,7 @@
 
 **As of 2026-10-24**
 **Database principal:** ACTIVE; separately verified Supabase Auth UID bound
-**App deployment:** BLOCKED pending new Vercel build
+**App deployment:** PROTECTED PREVIEW READY on a new build; signed-out verification PASS
 **Dot-browser sign-in:** NOT RUN
 **PR:** https://github.com/ags10101616/andrai-os/pull/12 (DRAFT)
 
@@ -21,27 +21,17 @@
 - No password, Auth token or private email identity included in public GitHub source.
 - Global OS-10 and all module write flags remain OFF in feature/os-12 preview.
 
-## Blocker: Vercel environment requires a rebuild
+## Vercel deployment: initial incident resolved
 
-Initial READY deployment was built before its branch-scoped Supabase variables were added.
-`/agente` and `/equipo` returned HTTP 503 from the auth proxy, and
-`/diagnostico-acceso` returned HTTP 500; public health returned 200, which
-only verifies liveness.
+The first OS-12 deployment lacked branch-scoped Supabase environment values and returned HTTP 503/500 on protected routes. A forced API redeploy also encountered Vercel's daily deployment quota. A subsequent automatic Git-based deployment succeeded with current environment variables.
 
-An attempted manual redeploy then failed with the Vercel
-`api-deployments-free-per-day` quota (HTTP 402; retry later). No further
-deployment is claimed. The latest source is in the draft PR, but the current
-preview is not suitable for José Luis yet.
+Verified on the new READY deployment: /login HTTP 200, /diagnostico-acceso HTTP 200 showing signed-out, /agente, /equipo and /finanzas redirect a signed-out browser to login. The portal is safe to attempt with the agent's own credentials. Actual signed-in dot-browser E2E remains pending.
 
 ## Remaining gates
 
-1. Rebuild feature/os-12 after Vercel quota resets; check signed-out
-   `/agente` redirects to `/login` and `/diagnostico-acceso` is HTTP 200.
-2. Owner takes over dot cloud-browser login; confirm authorized `/agente`
-   and deny human staff/financial routes.
-3. Validate role revocation with dot's live session, cookies and security settings.
-4. GitHub Private, backup/restore verification, password-leak protection,
-   and owner review before enabling additional privileges.
-5. No merges, external notifications, commercial writes, or autonomous José Luis actions.
+1. Owner takes over dot cloud-browser login; confirm authorized `/agente` and deny human staff/financial routes.
+2. Validate role revocation with dot's live session, cookies and security settings.
+3. GitHub Private, backup/restore verification, password-leak protection, and owner review before additional privileges.
+4. No merges, external notifications, commercial writes, or autonomous José Luis actions.
 
-**Status: account provisioning complete; app/browser onboarding incomplete.**
+**Status: account provisioned and preview operational for login; real dot browser onboarding incomplete.**
