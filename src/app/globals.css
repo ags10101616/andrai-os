@@ -399,3 +399,78 @@ h1{font-size:clamp(34px,4vw,55px);line-height:1.07;letter-spacing:-.068em;font-w
  .finance-secondary strong{font-size:19px}
 }
 @media(max-width:380px){.finance-summary,.finance-secondary{grid-template-columns:1fr}}
+
+/* OS-09 — Live role-aware executive dashboard and reports */
+.db-intro{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:25px}
+.db-intro h1{font-size:clamp(35px,4vw,55px);line-height:1.08;letter-spacing:-.07em;margin:15px 0 12px}
+.db-intro p{color:var(--brand-secondary);font-size:13px;line-height:1.75;max-width:590px;margin:0}
+.db-asof{display:grid;gap:7px;min-width:170px;text-align:right;padding:13px 0}
+.db-asof small{font-size:9px;letter-spacing:.08em;color:var(--brand-secondary);font-weight:760}
+.db-asof strong{font-size:14px}
+.db-asof span{font-size:10px;color:var(--brand-secondary)}
+.db-toolbar{display:flex;justify-content:space-between;align-items:center;gap:18px;border:1px solid var(--brand-border);background:var(--brand-ivory-surface);border-radius:12px;padding:13px 16px;margin-bottom:10px}
+.db-window{display:flex;align-items:center;gap:15px}
+.db-window>span{font-size:10px;font-weight:780;color:var(--brand-secondary);letter-spacing:.1em}
+.db-window nav{display:flex;gap:5px;align-items:center}
+.db-window nav a{font-size:11px;font-weight:750;color:var(--brand-secondary);padding:9px 14px;border-radius:9px;border:1px solid transparent}
+.db-window nav a[aria-current="page"]{background:#1a1b19;color:#fffdf8}
+.db-export{border-radius:9px;padding:11px 15px;color:var(--brand-action-text);font-weight:790;font-size:11px;border:1px solid #e6c6b8;background:#fff5ef}
+.db-export:hover{background:#ffe9dd}
+.db-period-note{font-size:11px;line-height:1.65;color:var(--brand-secondary);margin:0 0 22px}
+.db-period-note strong{color:var(--brand-ink)}
+.db-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:19px}
+.db-counter{display:flex;flex-direction:column;gap:12px;min-width:0;min-height:144px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-ivory-surface);padding:21px 19px;box-shadow:var(--brand-shadow-card);transition:border-color .16s}
+.db-counter:hover{border-color:#d7bcb0}
+.db-counter small{font-size:11px;font-weight:720;color:#5a615b;line-height:1.4}
+.db-counter strong{font-size:clamp(24px,2.5vw,35px);line-height:1.1;letter-spacing:-.055em;overflow-wrap:anywhere}
+.db-counter span{font-size:10px;color:var(--brand-secondary);line-height:1.55;margin-top:auto}
+.db-finance-row{margin-top:21px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.db-finance-row>div{padding:16px 12px;border:1px solid var(--brand-border);border-radius:9px;display:flex;flex-direction:column;gap:9px;background:#fffdf9}
+.db-finance-row small{font-size:10px;color:var(--brand-secondary);line-height:1.45}
+.db-finance-row strong{font-size:clamp(15px,1.55vw,22px);font-weight:790;letter-spacing:-.04em;overflow-wrap:anywhere}
+.db-caveat{font-size:11px;color:var(--brand-secondary);margin:15px 0 0}
+.db-panel-grid{margin-top:19px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.db-panel-grid .panel{min-height:290px}
+.db-breakdown{display:grid;gap:15px;margin:27px 0 20px}
+.db-breakdown-row{display:grid;grid-template-columns:minmax(85px,1fr) minmax(65px,1.7fr) 42px;align-items:center;gap:12px}
+.db-breakdown-row>span{font-size:11px;color:#525b54}
+.db-breakdown-row>strong{font-size:11px;text-align:right;color:var(--brand-ink);font-variant-numeric:tabular-nums}
+.db-bar-track{height:9px;background:#f1ede8;border-radius:99px;overflow:hidden}
+.db-bar-fill{height:100%;min-width:0;background:var(--brand-coral);border-radius:99px}
+.db-panel-foot{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap;font-size:10px;color:var(--brand-secondary);border-top:1px solid var(--brand-border);padding-top:15px;margin-top:13px}
+.db-panel-foot strong{color:var(--brand-ink)}
+.db-queue,.db-audit{list-style:none;margin:16px 0 0;padding:0}
+.db-queue-item{display:flex;flex-direction:column;gap:6px;border-bottom:1px solid var(--brand-border);padding:11px 0}
+.db-queue-item:last-child{border-bottom:0}
+.db-queue-item strong{font-size:12px;font-weight:760;line-height:1.45}
+.db-queue-kind{font-size:9px;color:var(--brand-action-text);font-weight:790;text-transform:uppercase;letter-spacing:.07em}
+.db-next-action{font-size:11px;color:var(--brand-secondary);line-height:1.5}
+.db-past-due,.db-due{font-size:10px;font-weight:730}
+.db-past-due{color:#a2452b}
+.db-due{color:#53655a}
+.db-audit li{display:flex;gap:13px;align-items:flex-start;padding:11px 2px;border-bottom:1px solid var(--brand-border)}
+.db-audit li:last-child{border-bottom:0}
+.db-audit-dot{flex:0 0 auto;width:7px;height:7px;margin-top:6px;border-radius:50%;background:var(--brand-coral)}
+.db-audit strong,.db-audit small{display:block}
+.db-audit strong{font-size:11px;margin-bottom:6px}
+.db-audit small{font-size:10px;color:var(--brand-secondary)}
+.db-ethics-foot{border-top:1px solid var(--brand-border);margin-top:24px;padding:21px 0;color:var(--brand-secondary);font-size:11px;line-height:1.8}
+.db-ethics-foot strong{color:var(--brand-ink)}
+@media(max-width:1100px){.db-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.db-finance-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.db-panel-grid{grid-template-columns:1fr}}
+@media(max-width:640px){
+ .db-intro{flex-direction:column;align-items:flex-start;gap:6px}
+ .db-asof{text-align:left;padding:3px 0}
+ .db-toolbar{align-items:flex-start;flex-direction:column}
+ .db-window{width:100%;justify-content:space-between;gap:6px}
+ .db-metrics{gap:9px}
+ .db-counter{padding:16px 13px;min-height:127px}
+ .db-counter strong{font-size:26px}
+ .db-finance-row{gap:9px}
+ .db-finance-row>div{padding:13px 11px}
+ .db-finance-row strong{font-size:17px}
+ .db-panel-grid{gap:11px}
+ .db-breakdown-row{grid-template-columns:minmax(65px,1fr) minmax(45px,1fr) 28px;gap:8px}
+ .db-breakdown-row>span{font-size:10px}
+}
+@media(max-width:340px){.db-metrics,.db-finance-row{grid-template-columns:1fr}.db-window nav a{padding:8px 10px}}
