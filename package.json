@@ -1,6 +1,6 @@
 {
   "name": "andrai-os",
-  "version": "0.2.0-os02-auth",
+  "version": "0.7.0-os07-preview",
   "private": true,
   "type": "module",
   "engines": {
@@ -20,7 +20,8 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "@supabase/ssr": "0.12.4",
-    "@supabase/supabase-js": "2.111.0"
+    "@supabase/supabase-js": "2.111.0",
+    "pdf-lib": "1.17.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.3.3",
