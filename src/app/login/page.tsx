@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { signInWithPassword } from '@/lib/auth/actions';
 
 export const metadata: Metadata = { title: 'Acceso privado' };
@@ -33,7 +34,10 @@ export default async function LoginPage({
           <button type="submit" className="auth-submit">Entrar a ANDRAI OS <span aria-hidden="true">↗</span></button>
         </form>
         <div className="auth-notice">¿No tiene acceso o necesita recuperar su contraseña? Solicite ayuda a Dirección. Las invitaciones se gestionan de forma privada.</div>
-        <div className="auth-footnote">Acceso restringido · Sesiones verificadas en Supabase · Sin acceso autónomo de agentes</div>
+        <div className="auth-footnote">
+          <Link href="/diagnostico-acceso">Comprobar sesión y permisos ↗</Link>
+          <p>Acceso restringido · Sesiones verificadas en Supabase · Sin acceso autónomo de agentes</p>
+        </div>
       </div>
     </section>
   </main>;

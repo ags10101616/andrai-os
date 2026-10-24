@@ -30,7 +30,11 @@ export function canVisit(role: TeamRole | null | undefined, section: string): bo
 
 export function isWorkspacePath(pathname: string): boolean {
   const segments = pathname.split('/').filter(Boolean);
-  return segments.length === 1 && isSection(segments[0]);
+  // Include nested workspace screens (quote details, PDF and CSV exports).
+  // Invalid traversal sequences never pass this basic UX routing guard.
+  return segments.length >= 1
+    && !pathname.includes('..')
+    && isSection(segments[0]);
 }
 
 export const roleLabels: Readonly<Record<TeamRole, string>> = {
