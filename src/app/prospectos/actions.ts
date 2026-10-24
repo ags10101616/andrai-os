@@ -5,7 +5,6 @@ import { createLeadAtomic } from '@/lib/data/leads';
 import { parseMxAmountMinor } from '@/lib/data/money';
 
 export type LeadSubmissionState = { kind:'idle'|'error'|'success'|'disabled';message:string };
-export const defaultLeadState:LeadSubmissionState={kind:'idle',message:''};
 const sources=['Doce Diez','Prospección','Referido','Sitio web','Otro'];
 
 function str(data:FormData,key:string,max:number):string|null {
