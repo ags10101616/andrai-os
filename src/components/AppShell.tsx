@@ -27,6 +27,7 @@ export function AppShell({
         )}
         {role === 'owner' && <>
           <div className="nav-label nav-label-later">DIRECCIÓN</div>
+          <Link href="/eventos" className={'nav-item' + (active === 'eventos' ? ' selected' : '')} aria-current={active === 'eventos' ? 'page' : undefined}><span className="nav-icon" aria-hidden="true">◎</span>Actividad y eventos</Link>
           <Link href="/equipo" className={'nav-item' + (active === 'equipo' ? ' selected' : '')} aria-current={active === 'equipo' ? 'page' : undefined}><span className="nav-icon" aria-hidden="true">♙</span>Equipo y permisos</Link>
           <Link href="/jose-luis" className={'nav-item' + (active === 'jose-luis' ? ' selected' : '')} aria-current={active === 'jose-luis' ? 'page' : undefined}><span className="nav-icon" aria-hidden="true">✳</span>José Luis</Link>
         </>}
