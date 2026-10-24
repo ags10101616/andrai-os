@@ -1,4 +1,5 @@
 'use server';
+import { isPilotReadOnly } from '@/lib/release/gates';
 import { revalidatePath } from 'next/cache';
 import { requireMembership } from '@/lib/auth/session';
 import { createServerSupabase } from '@/lib/auth/server';
@@ -10,7 +11,7 @@ function field(form:FormData,key:string,max:number):string|null {
  const value=form.get(key);
  return typeof value==='string'&&value.length<=max?value.trim():null;
 }
-function canWrite():boolean{return process.env.OS06_OPERATIONS_WRITES_ENABLED==='true';}
+function canWrite():boolean{return !isPilotReadOnly()&&process.env.OS06_OPERATIONS_WRITES_ENABLED==='true';}
 
 export async function createProjectAction(_previous:ProjectActionState,form:FormData):Promise<ProjectActionState>{
  if(!canWrite())return {status:'disabled',message:'Las escrituras permanecen desactivadas hasta aprobar el piloto.'};

@@ -1,3 +1,4 @@
+import { isPilotReadOnly } from '@/lib/release/gates';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AppShell } from '@/components/AppShell';
@@ -18,7 +19,7 @@ export default async function ProjectsPage({
  const stage=isProjectStage(stageValue)?stageValue:undefined;
  const [projects,options]=await Promise.all([listProjects(stage),projectFormOptions()]);
  const {member}=options;
- const writes=process.env.OS06_OPERATIONS_WRITES_ENABLED==='true';
+ const writes=!isPilotReadOnly()&&process.env.OS06_OPERATIONS_WRITES_ENABLED==='true';
  return <AppShell active="proyectos" role={member.role} displayName={member.displayName}>
   <section className="page-intro">
    <div><div className="eyebrow">OPERACIÓN / PROYECTOS / OS-06</div>

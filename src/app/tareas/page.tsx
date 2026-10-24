@@ -1,3 +1,4 @@
+import { isPilotReadOnly } from '@/lib/release/gates';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AppShell } from '@/components/AppShell';
@@ -25,7 +26,7 @@ export default async function TasksPage({
   listTasks({view,projectId}),taskFormOptions(),
  ]);
  const {member}=options;
- const writes=process.env.OS06_OPERATIONS_WRITES_ENABLED==='true';
+ const writes=!isPilotReadOnly()&&process.env.OS06_OPERATIONS_WRITES_ENABLED==='true';
  const projectName=projectId?options.projects.find(p=>p.id===projectId)?.name:null;
  return <AppShell active="tareas" role={member.role} displayName={member.displayName}>
   <section className="page-intro">

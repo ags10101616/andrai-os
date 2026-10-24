@@ -1,3 +1,4 @@
+import { isPilotReadOnly } from '@/lib/release/gates';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AppShell } from '@/components/AppShell';
@@ -34,7 +35,7 @@ export default async function FinancePage({
  const {type}=await searchParams;
  const filter=filterOptions.some(x=>x.kind===type)?type:'all';
  const report=await loadFinanceReport();
- const enabled=process.env.OS08_FINANCE_WRITES_ENABLED==='true';
+ const enabled=!isPilotReadOnly()&&process.env.OS08_FINANCE_WRITES_ENABLED==='true';
  const entries=filter==='all'?report.entries:report.entries.filter(x=>x.type===filter);
  const {summary}=report;
  return <AppShell active="finanzas" role={member.role} displayName={member.displayName}>

@@ -11,6 +11,7 @@ export default function RestrictedPage() {
       <h1>Acceso restringido.</h1>
       <p>Su cuenta no tiene una membresía activa para esta sección. La autorización se determina en el servidor y en la base de datos.</p>
       <form action={signOut}><button className="auth-submit" type="submit">Cerrar sesión</button></form>
+      <Link href="/diagnostico-acceso" className="auth-back">Comprobar sesión y permisos →</Link>
       <Link href="/resumen" className="auth-back">Volver al resumen →</Link>
     </div>
   </main>;

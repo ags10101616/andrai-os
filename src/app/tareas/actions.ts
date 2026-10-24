@@ -1,4 +1,5 @@
 'use server';
+import { isPilotReadOnly } from '@/lib/release/gates';
 import { revalidatePath } from 'next/cache';
 import { requireMembership } from '@/lib/auth/session';
 import { createServerSupabase } from '@/lib/auth/server';
@@ -8,7 +9,7 @@ export type TaskActionState={status:'idle'|'success'|'error'|'disabled';message:
 function field(form:FormData,key:string,max:number):string|null{
  const value=form.get(key);return typeof value==='string'&&value.length<=max?value.trim():null;
 }
-function canWrite(){return process.env.OS06_OPERATIONS_WRITES_ENABLED==='true';}
+function canWrite(){return !isPilotReadOnly()&&process.env.OS06_OPERATIONS_WRITES_ENABLED==='true';}
 
 export async function createTaskAction(_previous:TaskActionState,form:FormData):Promise<TaskActionState>{
  if(!canWrite())return {status:'disabled',message:'La captura de tareas está desactivada hasta validar el piloto.'};

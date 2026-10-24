@@ -21,8 +21,9 @@ export async function signInWithPassword(form: FormData) {
   if (error || !data.user?.email_confirmed_at) {
     redirect('/login?error=invalid');
   }
-  // Membership and route rights are checked afresh on the server by the destination page.
-  redirect('/resumen');
+  // Never interpret a confirmed login as an authorized workspace membership.
+  // The diagnostics page revalidates Auth + RLS server-side.
+  redirect('/diagnostico-acceso');
 }
 
 export async function signOut() {
