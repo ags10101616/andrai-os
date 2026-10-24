@@ -1,0 +1,20 @@
+-- Run manually against the ANDRAI OS Supabase project as a single
+-- transaction; ALL changes are rolled back. Do not put user IDs in Git.
+-- Replace :owner_uid and 4 UUIDs with values generated inside the test
+-- environment; do not use this as a migration or production seed.
+--
+-- BEGIN;
+-- SET LOCAL ROLE authenticated;
+-- SELECT set_config('request.jwt.claim.sub', :'owner_uid', true);
+-- SELECT * FROM public.os_create_lead_v1(
+--   :'client_id', :'opportunity_id', 'SQL test', '', NULL, NULL, 'QA',
+--   'Test opportunity', 1000, 'Call lead', current_date
+-- );
+-- -- Repeat with same IDs: created must be false and counts remain 1.
+-- -- Repeat with changed title: SQLSTATE 23505.
+-- -- Attempt UPDATE organization_id: SQLSTATE 42501.
+-- -- Attempt another unbound JWT: SQLSTATE 42501.
+-- ROLLBACK;
+--
+-- The actual tests must use a transaction, have an assertion on every
+-- invariant, and verify zero persistent rows afterwards.
