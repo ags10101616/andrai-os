@@ -363,3 +363,39 @@ h1{font-size:clamp(34px,4vw,55px);line-height:1.07;letter-spacing:-.068em;font-w
  .quote-download{display:inline-block;margin-top:16px}
  .quote-decision-list{flex-direction:column}
 }
+
+/* OS-08 · Finance: manual, owner-only cashbook */
+.finance-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:18px}
+.finance-metric-value{font-size:clamp(18px,2.15vw,31px)!important;line-height:1.25!important;letter-spacing:-.05em!important;overflow-wrap:anywhere}
+.finance-secondary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:18px}
+.finance-secondary>div{border:1px solid var(--brand-border);border-radius:12px;padding:23px;background:var(--brand-ivory-surface)}
+.finance-secondary small{display:block;color:var(--brand-secondary);font-size:11px;line-height:1.5;margin-bottom:12px}
+.finance-secondary strong{display:block;font-size:clamp(20px,2.5vw,32px);letter-spacing:-.05em;overflow-wrap:anywhere}
+.finance-secondary p{font-size:10px;line-height:1.6;color:var(--brand-secondary);margin:10px 0 0}
+.finance-table-scroll{overflow-x:auto;margin-top:19px}
+.finance-table{border-collapse:collapse;width:100%;min-width:660px;font-size:11px}
+.finance-table caption{position:absolute;clip-path:inset(50%);height:1px;width:1px;overflow:hidden}
+.finance-table th{padding:11px 13px;border-bottom:1px solid var(--brand-border);color:var(--brand-secondary);font-size:10px;text-align:left;white-space:nowrap}
+.finance-table td{padding:16px 13px;border-bottom:1px solid var(--brand-border);vertical-align:top;color:var(--brand-ink);line-height:1.6}
+.finance-table td:not(:first-child),.finance-table th:not(:first-child){text-align:right}
+.finance-table td strong,.finance-table td span{display:block}
+.finance-table td span{font-size:10px;color:var(--brand-secondary);margin-top:4px;max-width:300px;overflow-wrap:anywhere}
+.finance-table a{color:#934326;text-decoration:underline;text-underline-offset:3px;font-weight:750}
+.finance-table .finance-strong{font-weight:800}
+.finance-table .finance-receipt{color:#27583a}
+.finance-table .finance-expense,.finance-table .finance-refund{color:#95432d}
+.finance-filters{display:flex;gap:7px;flex-wrap:wrap;margin-top:21px}
+.finance-filters a{font-size:11px;padding:8px 12px;border:1px solid var(--brand-border);color:var(--brand-secondary);border-radius:99px;font-weight:700}
+.finance-filters a[aria-current="page"]{background:#fff0e8;border-color:#dfbca9;color:#9b431f}
+.finance-form-section{margin-top:18px}
+.finance-disclaimer{margin:21px 0 0;padding:17px 21px;border-top:1px solid var(--brand-border);font-size:11px;color:var(--brand-secondary);line-height:1.75}
+@media(max-width:1050px){.finance-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){
+ .finance-summary,.finance-secondary{grid-template-columns:1fr 1fr;gap:10px}
+ .finance-secondary>div{padding:16px}
+ .finance-filters{flex-wrap:nowrap;overflow-x:auto;padding:2px 0 10px;scrollbar-width:thin}
+ .finance-filters a{white-space:nowrap}
+ .finance-metric-value{font-size:20px!important}
+ .finance-secondary strong{font-size:19px}
+}
+@media(max-width:380px){.finance-summary,.finance-secondary{grid-template-columns:1fr}}
