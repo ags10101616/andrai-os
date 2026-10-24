@@ -1,0 +1,29 @@
+/*
+ * ANDRAI OS / Spectral Ember semantic tokens — OS-04 foundation.
+ * Do not make up client-specific theme colors.
+ * Ember is an accent, not body text on ivory.
+ */
+:root {
+  --brand-obsidian: #0c0e0d;
+  --brand-graphite: #171a18;
+  --brand-ivory: #f3f0e8;
+  --brand-ivory-surface: #fffdf8;
+  --brand-coral: #ff6036;
+  --brand-action-text: #a94020;
+  --brand-ink: #191a1b;
+  --brand-secondary: #626862;
+  --brand-border: #e7e3dc;
+  --brand-radius-sm: 9px;
+  --brand-radius-md: 12px;
+  --brand-radius-lg: 18px;
+  --brand-focus: 3px solid #a94020;
+  --brand-shadow-card: 0 8px 26px rgba(0,0,0,.022);
+  --brand-motion-fast: 160ms;
+  --brand-motion-standard: 280ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --brand-motion-fast: 0ms;
+    --brand-motion-standard: 0ms;
+  }
+}
