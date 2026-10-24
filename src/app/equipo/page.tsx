@@ -18,6 +18,11 @@ export default async function TeamPage() {
     .order('display_name');
 
   if (error) throw new Error('Unable to load workspace staff.');
+  const {data:agentRows,error:agentError}=await db.from('os_agent_identities')
+   .select('id,display_name,agent_slug,status,bound_user_id')
+   .eq('organization_id',member.organizationId)
+   .order('display_name');
+  if(agentError)throw new Error('Unable to load agent account status.');
   return <AppShell active="equipo" role={member.role} displayName={member.displayName}>
     <section className="page-intro"><div><div className="eyebrow">DIRECCIÓN / CONTROL DE ACCESO</div><h1>Equipo y permisos<span className="accent">.</span></h1><p>Solo Dirección puede consultar la membresía del workspace. Las altas requieren revisión administrativa.</p></div></section>
     <section className="panel">
@@ -29,7 +34,22 @@ export default async function TeamPage() {
           <span className={row.active && row.bound_user_id ? 'roster-ready' : 'roster-pending'}>{row.active && row.bound_user_id ? 'Vinculado' : 'Sin activar'}</span>
         </div>)}
       </div>
-      <p className="note">José Luis no aparece como usuario porque todavía no dispone de identidad ni permisos automatizados. Las invitaciones se activarán tras las pruebas de seguridad.</p>
+      <p className="note">Las altas humanas se gestionan por separado y requieren una identidad confirmada.</p>
+    </section>
+    <section className="panel agent-registry-panel">
+     <div className="panel-head"><div><h2>Identidades de agentes</h2>
+      <p>Estas identidades nunca heredan roles humanos. Vinculación administrada y revocable.</p>
+     </div></div>
+     <div className="roster" role="list">
+      {(agentRows??[]).map(agent=><div key={agent.id} className="roster-entry" role="listitem">
+       <div><strong>{agent.display_name}</strong><small>Agente separado · {agent.agent_slug}</small></div>
+       <span>Solo lectura</span>
+       <span className={agent.status==='active'&&agent.bound_user_id?'roster-ready':'roster-pending'}>
+        {agent.status==='active'&&agent.bound_user_id?'Activo':agent.status==='suspended'?'Suspendido':'Pendiente'}
+       </span>
+      </div>)}
+     </div>
+     <p className="note">El alta definitiva requiere una cuenta Auth confirmada y vinculada. No se crean contraseñas ni invitaciones desde este panel.</p>
     </section>
   </AppShell>;
 }
