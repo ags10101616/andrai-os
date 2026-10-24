@@ -21,18 +21,18 @@ select set_config('request.jwt.claim.sub',bound_user_id::text,true)
  from public.os_staff where role='owner' and active and bound_user_id is not null limit 1;
 set local role authenticated;
 do $cross$
-declare project_id uuid:=current_setting('os08.other_project')::uuid;
- id uuid:=gen_random_uuid(); n int;
+declare v_project_id uuid:=current_setting('os08.other_project')::uuid;
+ v_entry_id uuid:=gen_random_uuid(); n int;
 begin
  begin
   perform * from public.os08_record_manual_entry_v1(
-   id,'expense',12300,'Synthetic foreign project','transfer',current_date,'QA',null,project_id);
+   v_entry_id,'expense',12300,'Synthetic foreign project','transfer',current_date,'QA',null,v_project_id);
   raise exception 'Cross-tenant record was created';
  exception when insufficient_privilege then null;
  end;
- select count(*) into n from public.os_ledger where id=id;
+ select count(*) into n from public.os_ledger l where l.id=v_entry_id;
  if n<>0 then raise exception 'Unexpected cross-tenant financial record';end if;
- select count(*) into n from public.os_projects where public.os_projects.id=project_id;
+ select count(*) into n from public.os_projects where public.os_projects.id=v_project_id;
  if n<>0 then raise exception 'Foreign project visible through RLS';end if;
 end $cross$;
 rollback;
