@@ -30,8 +30,8 @@ export async function recordManualMovement(
  const method=input(form,'method',10);
  const happenedOn=input(form,'happened_on',10);
  const note=input(form,'note',1500);
- const quoteId=input(form,'quote_id',40);
- const projectId=input(form,'project_id',40);
+ const quoteId=input(form,'quote_id',40)??'';
+ const projectId=input(form,'project_id',40)??'';
  if(!isUuid(id)||!isFinanceEntryType(entryType)||!isFinanceMethod(method)||
     amountMinor===null||amountMinor<1||reference===null||reference.length<2||
     !isISODate(happenedOn)||note===null||quoteId===null||projectId===null||

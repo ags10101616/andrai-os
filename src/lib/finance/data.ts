@@ -2,7 +2,7 @@ import 'server-only';
 import { createServerSupabase } from '@/lib/auth/server';
 import { requireMembership } from '@/lib/auth/session';
 import {
- minorAmount,isFinanceEntryType,isFinanceMethod,
+ minorAmount,safeFinanceTotal,isFinanceEntryType,isFinanceMethod,
  type FinanceEntry,type FinanceReport,type QuoteBalance,
  type FinanceSummary,type FinanceOption
 } from './model';
@@ -41,12 +41,12 @@ export async function loadFinanceReport():Promise<FinanceReport>{
 
  const rawSummary=asRecord(summaryResult.data);
  const summary:FinanceSummary={
-  receiptsMinor:minorAmount(rawSummary.receipts_minor),
-  expensesMinor:minorAmount(rawSummary.expenses_minor),
-  refundsMinor:minorAmount(rawSummary.refunds_minor),
+  receiptsMinor:safeFinanceTotal(rawSummary.receipts_minor),
+  expensesMinor:safeFinanceTotal(rawSummary.expenses_minor),
+  refundsMinor:safeFinanceTotal(rawSummary.refunds_minor),
   netMovementMinor:Number(rawSummary.net_movement_minor),
-  acceptedTotalMinor:minorAmount(rawSummary.accepted_quote_total_minor),
-  acceptedOpenMinor:minorAmount(rawSummary.accepted_quote_open_minor),
+  acceptedTotalMinor:safeFinanceTotal(rawSummary.accepted_quote_total_minor),
+  acceptedOpenMinor:safeFinanceTotal(rawSummary.accepted_quote_open_minor),
  };
  if(!Number.isSafeInteger(summary.netMovementMinor))
   throw new Error('Invalid net cash movement');

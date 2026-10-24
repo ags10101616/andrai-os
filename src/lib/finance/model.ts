@@ -19,6 +19,11 @@ export function minorAmount(x:unknown):number{
  if(!Number.isSafeInteger(n)||n<0||n>999999999999)throw new Error('Invalid financial amount in response');
  return n;
 }
+export function safeFinanceTotal(x:unknown):number{
+ const n=Number(x);
+ if(!Number.isSafeInteger(n)||n<0)throw new Error('Invalid finance aggregate');
+ return n;
+}
 export function signedMoneyMXN(cents:number):string{
  if(!Number.isSafeInteger(cents))return '—';
  return new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:2,maximumFractionDigits:2}).format(cents/100);

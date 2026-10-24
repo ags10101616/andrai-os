@@ -84,6 +84,7 @@ export function ManualEntryForm({
        placeholder="Referencia bancaria o folio interno de conciliación"/>
      </label>
      <label>Vincular con cotización{entryType==='refund'?' *':''}
+      {!canLinkQuote&&<input type="hidden" name="quote_id" value="" readOnly/>}
       <select name="quote_id" required={entryType==='refund'} disabled={!canLinkQuote}
        value={canLinkQuote?quoteId:''} onChange={e=>setQuoteId(e.target.value)}>
        <option value="">Sin cotización</option>
@@ -93,6 +94,7 @@ export function ManualEntryForm({
       </select>
      </label>
      <label>Proyecto (solo sin cotización)
+      {quoteId&&<input type="hidden" name="project_id" value="" readOnly/>}
       <select key={quoteId} name="project_id" defaultValue="" disabled={!!quoteId}>
        <option value="">Sin proyecto</option>
        {projects.map(project=><option key={project.id} value={project.id}>{project.name}</option>)}
