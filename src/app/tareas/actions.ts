@@ -4,7 +4,7 @@ import { requireMembership } from '@/lib/auth/session';
 import { createServerSupabase } from '@/lib/auth/server';
 import { isUuid,isISODate,isRevision,isTaskKind,isTaskPriority } from '@/lib/data/ops-validation';
 
-export type TaskActionState={status:'idle'|'success'|'error'|'disabled';message:string};
+export type TaskActionState={status:'idle'|'success'|'error'|'disabled';message:string;completedId?:string};
 function field(form:FormData,key:string,max:number):string|null{
  const value=form.get(key);return typeof value==='string'&&value.length<=max?value.trim():null;
 }
@@ -18,8 +18,8 @@ export async function createTaskAction(_previous:TaskActionState,form:FormData):
  const association=field(form,'association',60),assignee=field(form,'assignee_id',40);
  const kind=field(form,'kind',20),priority=field(form,'priority',20);
  if(!isUuid(id)||!title||title.length<2||description===null||!isISODate(dueOn)||
-  !isTaskKind(kind)||!isTaskPriority(priority)||assignee===null||
-  (assignee!==''&&!isUuid(assignee))||association===null){
+  !isTaskKind(kind)||!isTaskPriority(priority)||
+  (assignee!==null&&assignee!==''&&!isUuid(assignee))||association===null){
    return {status:'error',message:'Completa título, fecha, tipo, prioridad y responsable válidos.'};
  }
  let projectId:string|null=null,opportunityId:string|null=null;
@@ -43,7 +43,7 @@ export async function createTaskAction(_previous:TaskActionState,form:FormData):
   if(error)throw error;
   revalidatePath('/tareas');
   revalidatePath('/proyectos');
-  return {status:'success',message:'Tarea registrada correctamente.'};
+  return {status:'success',message:'Tarea registrada correctamente.',completedId:id};
  }catch{return {status:'error',message:'No se pudo guardar la tarea. Reintenta sin cambiar su identificador.'};}
 }
 

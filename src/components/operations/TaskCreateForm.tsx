@@ -26,7 +26,7 @@ export function TaskCreateForm({projects,opportunities,staff,enabled,defaultProj
   return ()=>cancelAnimationFrame(frame);
  },[]);
  useEffect(()=>{
-  if(state.status!=='success')return;
+  if(state.status!=='success'||!state.completedId)return;
   const frame=requestAnimationFrame(()=>{
    ref.current?.reset();
    const next=crypto.randomUUID();
@@ -35,7 +35,7 @@ export function TaskCreateForm({projects,opportunities,staff,enabled,defaultProj
    router.refresh();
   });
   return ()=>cancelAnimationFrame(frame);
- },[state.status,router]);
+ },[state.status,state.completedId,router]);
  const canSubmit=enabled&&Boolean(id)&&!pending;
  const projectDefault=defaultProject&&projects.some(p=>p.id===defaultProject)?'project:'+defaultProject:'none';
  return <section className="panel ops-create" aria-labelledby="new-task-title">

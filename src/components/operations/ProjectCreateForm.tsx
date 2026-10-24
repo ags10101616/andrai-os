@@ -25,7 +25,7 @@ export function ProjectCreateForm({clients,staff,enabled}:{
   return ()=>cancelAnimationFrame(frame);
  },[]);
  useEffect(()=>{
-  if(state.status!=='success')return;
+  if(state.status!=='success'||!state.completedId)return;
   const frame=requestAnimationFrame(()=>{
    ref.current?.reset();
    const next=crypto.randomUUID();
@@ -34,7 +34,7 @@ export function ProjectCreateForm({clients,staff,enabled}:{
    router.refresh();
   });
   return ()=>cancelAnimationFrame(frame);
- },[state.status,router]);
+ },[state.status,state.completedId,router]);
  const canSubmit=enabled&&clients.length>0&&Boolean(id)&&!pending;
  return <section className="panel ops-create" aria-labelledby="new-project-title">
   <div className="panel-head"><div><h2 id="new-project-title">Nuevo proyecto</h2><p>Cliente, responsable y alcance en un solo registro.</p></div>

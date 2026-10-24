@@ -66,7 +66,7 @@ export default async function TasksPage({
           {task.opportunityName&&<span>Oportunidad: {task.opportunityName}</span>}
          </div>
         </div>
-        {allowed&&<TaskStatusForm id={task.id} revision={task.revision} done={task.done} enabled={writes}/>}
+        {allowed&&<TaskStatusForm key={task.id+':'+task.revision} id={task.id} revision={task.revision} done={task.done} enabled={writes}/>}
        </article>;
       })}
      </div>}

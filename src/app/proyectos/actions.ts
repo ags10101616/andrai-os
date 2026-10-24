@@ -5,7 +5,7 @@ import { createServerSupabase } from '@/lib/auth/server';
 import { parseMxAmountMinor } from '@/lib/data/money';
 import { isUuid,isISODate,isRevision,isProjectStage } from '@/lib/data/ops-validation';
 
-export type ProjectActionState={status:'idle'|'success'|'error'|'disabled';message:string};
+export type ProjectActionState={status:'idle'|'success'|'error'|'disabled';message:string;completedId?:string};
 function field(form:FormData,key:string,max:number):string|null {
  const value=form.get(key);
  return typeof value==='string'&&value.length<=max?value.trim():null;
@@ -31,7 +31,7 @@ export async function createProjectAction(_previous:ProjectActionState,form:Form
   });
   if(error)throw error;
   revalidatePath('/proyectos');
-  return {status:'success',message:'Proyecto registrado correctamente.'};
+  return {status:'success',message:'Proyecto registrado correctamente.',completedId:id};
  }catch{return {status:'error',message:'No se pudo guardar el proyecto. Reintenta con el mismo identificador.'};}
 }
 

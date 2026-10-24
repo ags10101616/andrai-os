@@ -56,7 +56,7 @@ export default async function ProjectsPage({
         <Link href={'/tareas?project='+project.id}>Ver tareas del proyecto ↗</Link>
         <span>Rev. {project.revision}</span>
        </div>
-       {allowedEditor&&<ProjectStageForm id={project.id} revision={project.revision}
+       {allowedEditor&&<ProjectStageForm key={project.id+':'+project.revision} id={project.id} revision={project.revision}
         currentStage={project.stage} progress={project.progress} enabled={writes}/>}
       </article>;
      })}
