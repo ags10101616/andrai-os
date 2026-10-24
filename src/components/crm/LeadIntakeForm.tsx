@@ -2,7 +2,8 @@
 
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { defaultLeadState, submitLead } from '@/app/prospectos/actions';
+import { submitLead, type LeadSubmissionState } from '@/app/prospectos/actions';
+const defaultLeadState:LeadSubmissionState={kind:'idle',message:''};
 
 const STORE_KEY='andrai-os:pending-lead-ids:v1';
 type IdPair={clientId:string;opportunityId:string};
