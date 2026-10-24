@@ -1,27 +1,47 @@
-# OS-12 — Agente José Luis: entrega y activación controlada
+# OS-12 — Execution Report: José Luis Agent
 
-Estado: identidad interna creada pero INACTIVA. No existe todavía un usuario Supabase Auth del dot.
+**As of 2026-10-24**
+**Database principal:** ACTIVE; separately verified Supabase Auth UID bound
+**App deployment:** BLOCKED pending new Vercel build
+**Dot-browser sign-in:** NOT RUN
+**PR:** https://github.com/ags10101616/andrai-os/pull/12 (DRAFT)
 
-## Implementado
-- Tabla de agentes distinta de miembros humanos.
-- José Luis registrado con `status=pending`, sin correo ni UID.
-- Resumen seguro de 5 conteos, sin nombres, clientes, importes, información fiscal o financiera.
-- La sesión del agente no hereda los permisos de Dirección.
-- Pantalla /agente, diagnóstico separado y estado pendiente visible en /equipo.
-- Flag global de solo lectura y escrituras de todos los módulos anteriores desactivadas.
-- Prueba SQL reversible de acceso permitido solo con vinculación verificada, sin lectura de tablas comerciales.
+## Work completed
 
-## Activación posterior
-1. Elegir una cuenta de correo o alias real, controlada por el propietario; el dot no recibe automáticamente correo independiente.
-2. Crear el usuario de Supabase Auth a través del flujo compatible e introducir la confirmación en esa casilla real.
-3. Vincular el UID de Auth a la identidad pending únicamente tras cotejar correo/UID, y cambiar el estado a active mediante un proceso administrativo validado.
-4. Abrir ANDRAI OS desde la computadora de José Luis; el propietario toma el control del navegador para introducir contraseña y MFA de forma segura.
-5. Devolver control al dot, verificar /diagnostico-acceso y /agente y comprobar denegación de /finanzas y otras rutas humanas.
-6. Suspender el principal en caso de incidente y verificar la revocación.
+- Created separate `os_agent_identities` model and safe, `brief_read`-only RPC.
+- Owner invited independent email alias and confirmed the account through Auth.
+- Verified exactly one confirmed account and matching reserved agent identity; explicitly excluded any staff binding.
+- Set only `bound_user_id`, `status='active'`, `activated_at` on the intended agent.
+- Verified Direction membership remains intact (one owner).
+- Real JWT-identity simulation under authenticated SQL role:
+  - safe aggregate brief authorized;
+  - no staff or raw client/project/quote/financial/event access;
+  - owner financial RPC, staff dashboard, event feed and task creation blocked.
+- Simulated suspension revoked access immediately; transaction rolled back and active agent restored.
+- No password, Auth token or private email identity included in public GitHub source.
+- Global OS-10 and all module write flags remain OFF in feature/os-12 preview.
 
-## Limitaciones
-- La cuenta de José Luis no está activa ni ha iniciado sesión.
-- Vercel tiene protección de acceso adicional; la sesión del navegador del dot es independiente de la del propietario.
-- Quedan pendientes GitHub privado, protección de contraseñas filtradas, respaldo/restauración y E2E reales.
-- Ninguna propuesta, correo, pago, actualización ni acción de José Luis está autorizada en OS-12.
-- No se ha hecho merge a main ni desplegado el portal en producción.
+## Blocker: Vercel environment requires a rebuild
+
+Initial READY deployment was built before its branch-scoped Supabase variables were added.
+`/agente` and `/equipo` returned HTTP 503 from the auth proxy, and
+`/diagnostico-acceso` returned HTTP 500; public health returned 200, which
+only verifies liveness.
+
+An attempted manual redeploy then failed with the Vercel
+`api-deployments-free-per-day` quota (HTTP 402; retry later). No further
+deployment is claimed. The latest source is in the draft PR, but the current
+preview is not suitable for José Luis yet.
+
+## Remaining gates
+
+1. Rebuild feature/os-12 after Vercel quota resets; check signed-out
+   `/agente` redirects to `/login` and `/diagnostico-acceso` is HTTP 200.
+2. Owner takes over dot cloud-browser login; confirm authorized `/agente`
+   and deny human staff/financial routes.
+3. Validate role revocation with dot's live session, cookies and security settings.
+4. GitHub Private, backup/restore verification, password-leak protection,
+   and owner review before enabling additional privileges.
+5. No merges, external notifications, commercial writes, or autonomous José Luis actions.
+
+**Status: account provisioning complete; app/browser onboarding incomplete.**

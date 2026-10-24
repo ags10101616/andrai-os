@@ -1,67 +1,55 @@
 # OS-12 · José Luis Dot Account & Read-Only Agent Workspace
 
-**Status:** backend infrastructure and UI prepared; account remains PENDING.
-**Repository:** \`ags10101616/andrai-os\`, branch \`feature/os-12\`, parent \`feature/os-11\`.
-**Capability:** read-only safe summary. **No autonomous actions.**
+**Status:** independent Auth invitation accepted, confirmed account **ACTIVE** and bound to dedicated agent identity. Protected Vercel deployment and real dot-browser E2E still pending.
+**Branch:** `feature/os-12` (draft PR #12).
+**Capability:** `brief_read` only. **No autonomous actions or human staff permissions.**
 
-## Why a separate principal
-José Luis is a ChatGPT dot using its own cloud-browser session. It is not a human
-ANDRAI employee. It must not receive the owner account, a staff role, production
-secrets, a service-role key, or a shared password.
+## Independent principal
 
-OS-12 provisions one pending \`os_agent_identities\` row for agent slug \`jose-luis\`,
-with NULL login email and NULL Auth UID. This is **not yet an active Supabase login**
-and cannot be used until a valid external mailbox and verified Auth identity exist.
+José Luis is a ChatGPT dot; he does not share the owner's Supabase Auth account, cookie session or staff role. The owner created and verified a distinct email alias and completed an invitation in Supabase Auth. The corresponding real confirmed Auth UID was validated against the reserved `os_agent_identities` record and bound through a guarded administrative update.
 
-## Read-only architecture
-- A separate \`os_agent_identities\` table; no \`os_staff\` role changes.
-- \`status=pending|active|suspended\`, initially PENDING. No self-service writes.
-- Server verifies confirmed Supabase Auth UID and exact normalized email.
-- Private, guarded PostgreSQL helper returns only aggregated counts:
-  active projects, open tasks, open deliverables, quotes in review,
-  active opportunities and timestamp.
-- No names, email addresses, financial values, customer documents,
-  invoices, webhook credentials or private account details.
-- Core helper is private SECURITY DEFINER guarded by UID/email/status,
-  and exposed only through a public SECURITY INVOKER wrapper.
-- Base domain RLS continues to deny direct rows to this agent account.
-- Next.js route \`/agente\` uses a separate UI, **not** human AppShell/RBAC.
-- \`/diagnostico-acceso\` recognizes the agent role only after secure verification.
-- Owner-only \`/equipo\` shows agent provisioning status without secrets.
+**Verified current database status**
+- Agent slug `jose-luis`; status `active`.
+- Email matched exactly to confirmed Auth identity; UID bound.
+- Capabilities exactly `['brief_read']`.
+- No active human staff membership for that UID.
+- Existing Direction membership remains active.
+- No password or Auth token entered in Chat or committed to GitHub.
 
-## Secure onboarding checklist (not executed)
-1. Owner selects or controls a dedicated address/alias at an external email provider.
-   ChatGPT dots do not automatically receive a standalone email inbox.
-2. Owner creates a separate Supabase Auth user with that address through the
-   supported Auth invitation/signup flow, and confirms email in their mailbox.
-3. Administrator verifies auth.users identity and email, and binds the existing
-   pending \`os_agent_identities\` row to the verified Auth UID. This must be
-   performed as an explicitly reviewed administrative step, not from a public route.
-4. Only after verification, change status to active and set activated_at.
-   Confirm the email matches, and that the agent has no active human staff membership.
-5. Launch a task inside the actual José Luis dot, open its own cloud browser,
-   navigate to a protected ANDRAI OS login URL and **take over the browser** to
-   enter the password and complete MFA. Never send a password in chat.
-6. Return control to José Luis; verify \`/diagnostico-acceso\` sees agent scope,
-   and \`/agente\` loads the safe summary.
-7. Verify no access to \`/finanzas\`, staff routes, normal CRM rows, owner audit,
-   billing endpoints, PDF/CSV downloads, admin keys or private data.
-8. Suspend the agent principal on risk or change of staff. Test revocation.
-9. Vercel preview Authentication is an independent gate; temporary share links
-   are not a durable production login strategy.
-10. Before production use, make the GitHub repository private and complete OS-10
-    backup/restore, real role E2E and password-protection controls.
+## Architecture
 
-## Test evidence
-- Reversible PostgreSQL test temporarily separates existing owner identity
-  from staff (inside ROLLBACK), binds it as a synthetic agent and confirms the
-  safe count is visible while base CRM and Finance RLS deny data.
-- PENDING agent cannot fetch the safe brief.
-- App source-contract tests enforce role isolation and safe outputs.
-- Actual José Luis dot browser E2E is NOT RUN; no mailbox or Auth account
-  was invented/created.
+- `public.os_agent_identities` is separate from `os_staff`.
+- Only authorized owner can inspect agent registry status.
+- `/diagnostico-acceso` distinguishes human staff and agent sessions using fresh Supabase Auth checks.
+- `/agente` is not a human dashboard. It is a distinct, RLS-protected portal.
+- Guarded private PostgreSQL helper returns only five business *counts* and timestamp:
+  active projects, open tasks, open deliverables, quotes in review, active opportunities.
+- No clients, names, email addresses, prices, financial entries, invoices or raw row payloads.
+- Supabase Auth confirmed UID + normalized email + `active` status + capability `brief_read` must all match.
+- Agent cannot have an active staff binding at the same time.
+- No writes, outbound communications, payment access, admin keys or automated approval rights.
 
-## OS-13 (next gate)
-Typed proposals, dry-run, human approval, strict budgets, rate limits,
-audited outcomes, reversible changes where possible, and a global kill switch.
-OS-12 does not perform writes, messaging, collections or external sending.
+## Tested
+
+- Confirmed the agent's Auth invitation is accepted, email is confirmed, and account has logged in (in the owner's browser).
+- Guarded activation succeeded, with exactly one matching Auth account and no staff conflict.
+- Live bound-agent JWT role simulation returned authorized aggregate `brief_read`.
+- Negative checks: raw staff, customer, project, finance, event data denied; owner reporting and project mutation denied.
+- Verified status change to `suspended` immediately revokes the brief RPC inside a reversible transaction.
+- Role and suspension tests use `BEGIN ... ROLLBACK`, preserving the real active identity.
+- Node tests, lint, TypeScript, Next build and dependency audit passed on previous OS-12 feature commits.
+
+## Not yet proven
+
+- Dot's **own** cloud-browser sign-in to ANDRAI OS. Auth acceptance in the owner's browser is not an authenticated dot-browser E2E.
+- Current OS-12 preview deployment was built before branch environment variables were configured. Signed-out protected routes returned 503 and access diagnostics 500.
+- Vercel API refused forced redeployment due to daily free deployment quota. The preview is **NOT YET READY** to hand to José Luis; rebuild and retest after quota availability.
+- GitHub repo remains public by owner's preference. No private customer records or tokens belong there.
+- Independent staging backup/restore, password leak protection, role E2E and device access remain launch gates.
+- Any future agent proposals require typed review and owner approval under OS-13; OS-12 has no sending or execution tools.
+
+## Next secure login step (after Vercel rebuild)
+
+Start work in the José Luis dot, use his own cloud browser to open the protected OS-12 login page; owner takes over the browser to sign in with the *agent* account and completes MFA. Return control to the dot. Confirm `/diagnostico-acceso` shows agent authorization and `/agente` renders the five counts. Verify that `/finanzas`, `/equipo`, ordinary CRM rows, owner CSV/PDF and server admin endpoints remain denied. Never send passwords or cookies through Chat.
+
+To revoke access, suspend the agent principal; this was SQL-tested with rollback.
