@@ -68,9 +68,18 @@ export async function createLeadAtomic(command: CreateLeadCommand): Promise<Crea
     if (error?.code === '42501') throw new Error('You are not authorized for this action');
     throw new Error('We could not create the lead; retry with the same request IDs');
   }
+  const row: unknown = data;
+  if (
+    !row || typeof row !== 'object' ||
+    !('client_id' in row) || typeof row.client_id !== 'string' ||
+    !('opportunity_id' in row) || typeof row.opportunity_id !== 'string' ||
+    !('created' in row) || typeof row.created !== 'boolean'
+  ) {
+    throw new Error('Lead creation returned an invalid response');
+  }
   return {
-    clientId: data.client_id as string,
-    opportunityId: data.opportunity_id as string,
-    created: data.created as boolean,
+    clientId: row.client_id,
+    opportunityId: row.opportunity_id,
+    created: row.created,
   };
 }
