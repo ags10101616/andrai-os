@@ -1,3 +1,4 @@
+import { isPilotReadOnly } from '@/lib/release/gates';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -21,7 +22,7 @@ export default async function QuoteDetailPage({params}:{
  if(!isQuoteId(id))notFound();
  const quote=await getQuoteDetail(id);
  if(!quote)notFound();
- const enabled=process.env.OS07_QUOTES_WRITES_ENABLED==='true';
+ const enabled=!isPilotReadOnly()&&process.env.OS07_QUOTES_WRITES_ENABLED==='true';
  const owner=member.role==='owner';
  const actions:{action:'submit'|'revise'|'approve'|'sent'|'accept'|'reject';label:string;notice?:string}[]=[];
  if(quote.status==='draft')actions.push({action:'submit',label:'Solicitar revisión ↗'});

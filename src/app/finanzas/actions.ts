@@ -1,4 +1,5 @@
 'use server';
+import { isPilotReadOnly } from '@/lib/release/gates';
 import { revalidatePath } from 'next/cache';
 import { requireMembership } from '@/lib/auth/session';
 import { createServerSupabase } from '@/lib/auth/server';
@@ -17,7 +18,7 @@ function input(form:FormData,key:string,max:number):string|null{
 export async function recordManualMovement(
  _previous:FinanceActionState,form:FormData
 ):Promise<FinanceActionState>{
- if(process.env.OS08_FINANCE_WRITES_ENABLED!=='true'){
+ if(isPilotReadOnly()||process.env.OS08_FINANCE_WRITES_ENABLED!=='true'){
   return {kind:'disabled',message:'El registro de movimientos continúa desactivado hasta aprobar el piloto.'};
  }
  const member=await requireMembership('finanzas');

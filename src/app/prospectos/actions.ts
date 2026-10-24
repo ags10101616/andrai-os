@@ -1,5 +1,6 @@
 'use server';
 
+import { isPilotReadOnly } from '@/lib/release/gates';
 import { revalidatePath } from 'next/cache';
 import { createLeadAtomic } from '@/lib/data/leads';
 import { parseMxAmountMinor } from '@/lib/data/money';
@@ -14,7 +15,7 @@ function str(data:FormData,key:string,max:number):string|null {
 }
 export async function submitLead(_previous:LeadSubmissionState,form:FormData):Promise<LeadSubmissionState> {
   // Always disabled by default; this is a REVIEWABLE PREVIEW, not a live CRM launch.
-  if(process.env.OS05_CRM_WRITES_ENABLED!=='true'){
+  if(isPilotReadOnly()||process.env.OS05_CRM_WRITES_ENABLED!=='true'){
     return {kind:'disabled',message:'Las altas están bloqueadas hasta la validación del piloto.'};
   }
   const clientId=str(form,'client_id',40),opportunityId=str(form,'opportunity_id',40);

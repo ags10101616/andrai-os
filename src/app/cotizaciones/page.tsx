@@ -1,3 +1,4 @@
+import { isPilotReadOnly } from '@/lib/release/gates';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AppShell } from '@/components/AppShell';
@@ -19,7 +20,7 @@ export default async function QuotesPage({searchParams}:{
  const {status:filterValue}=await searchParams;
  const status=isQuoteStatus(filterValue)?filterValue:undefined;
  const [quotes,options]=await Promise.all([listQuotes(status),quoteFormOptions()]);
- const enabled=process.env.OS07_QUOTES_WRITES_ENABLED==='true';
+ const enabled=!isPilotReadOnly()&&process.env.OS07_QUOTES_WRITES_ENABLED==='true';
  return <AppShell active="cotizaciones" role={member.role} displayName={member.displayName}>
    <section className="page-intro"><div>
     <div className="eyebrow">VENTAS / COTIZACIONES / OS-07</div>

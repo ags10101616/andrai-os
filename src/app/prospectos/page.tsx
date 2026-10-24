@@ -1,3 +1,4 @@
+import { isPilotReadOnly } from '@/lib/release/gates';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AppShell } from '@/components/AppShell';
@@ -16,7 +17,7 @@ export default async function ProspectsPage({searchParams}:{searchParams:Promise
   const {stage:stageInput}=await searchParams;
   const stage=isPipelineStage(stageInput)?stageInput:undefined;
   const entries=await loadPipeline(stage);
-  const writeEnabled=process.env.OS05_CRM_WRITES_ENABLED==='true';
+  const writeEnabled=!isPilotReadOnly()&&process.env.OS05_CRM_WRITES_ENABLED==='true';
   return <AppShell active="prospectos" role={member.role} displayName={member.displayName}>
     <section className="page-intro">
       <div><div className="eyebrow">COMERCIAL / CRM / OS-05</div><h1>Cada conversación<br/>cuenta<span className="accent">.</span></h1>

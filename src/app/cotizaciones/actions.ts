@@ -1,5 +1,6 @@
 'use server';
 
+import { isPilotReadOnly } from '@/lib/release/gates';
 import { revalidatePath } from 'next/cache';
 import { requireMembership } from '@/lib/auth/session';
 import { createServerSupabase } from '@/lib/auth/server';
@@ -16,7 +17,7 @@ function stringField(form:FormData,name:string,max:number):string|null{
  return typeof value==='string'&&value.length<=max?value.trim():null;
 }
 function writeEnabled():boolean{
- return process.env.OS07_QUOTES_WRITES_ENABLED==='true';
+ return !isPilotReadOnly()&&process.env.OS07_QUOTES_WRITES_ENABLED==='true';
 }
 function parseDraft(form:FormData){
  const title=stringField(form,'title',180);
