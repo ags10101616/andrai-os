@@ -31,16 +31,20 @@ export function LeadIntakeForm({enabled}:{enabled:boolean}) {
     } catch {
       value=fresh();
     }
-    setIds(value);
+    const frame=window.requestAnimationFrame(()=>setIds(value));
+    return ()=>window.cancelAnimationFrame(frame);
   },[]);
   useEffect(()=>{
     if(state.kind!=='success') return;
-    formRef.current?.reset();
-    try {sessionStorage.removeItem(STORE_KEY);} catch {/* private browsing */}
-    const next=fresh();
-    setIds(next);
-    try {sessionStorage.setItem(STORE_KEY,JSON.stringify(next));} catch {/* private browsing */}
-    router.refresh();
+    const frame=window.requestAnimationFrame(()=>{
+      formRef.current?.reset();
+      try {sessionStorage.removeItem(STORE_KEY);} catch {/* private browsing */}
+      const next=fresh();
+      try {sessionStorage.setItem(STORE_KEY,JSON.stringify(next));} catch {/* private browsing */}
+      setIds(next);
+      router.refresh();
+    });
+    return ()=>window.cancelAnimationFrame(frame);
   },[state.kind,router]);
 
   return <section className="panel intake-panel" aria-labelledby="crm-add-title">
