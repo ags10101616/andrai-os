@@ -2,7 +2,7 @@
 export type TeamRole = 'owner' | 'sales' | 'production';
 export type Section =
   | 'resumen' | 'prospectos' | 'proyectos' | 'cotizaciones'
-  | 'tareas' | 'finanzas' | 'jose-luis' | 'equipo';
+  | 'tareas' | 'finanzas' | 'jose-luis' | 'equipo' | 'eventos';
 
 export const allowedBySection: Readonly<Record<Section, readonly TeamRole[]>> = {
   resumen: ['owner', 'sales', 'production'],
@@ -13,6 +13,7 @@ export const allowedBySection: Readonly<Record<Section, readonly TeamRole[]>> = 
   finanzas: ['owner'],
   'jose-luis': ['owner'],
   equipo: ['owner'],
+  eventos: ['owner'],
 };
 
 export function isTeamRole(value: unknown): value is TeamRole {

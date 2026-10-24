@@ -232,7 +232,8 @@ export function ExecutiveDashboard({report,tasks,followups,activity}:{
       <Breakdown points={sales.quoteStatuses} labels={quoteLabels} ariaLabel="Cotizaciones reales por estado"/>
    </SectionSurface>}
    {report.role==='owner'&&<SectionSurface title="Actividad auditada"
-    subtitle="Últimos cambios del workspace, sin datos de contacto ni importes">
+    subtitle="Últimos cambios del workspace, sin datos de contacto ni importes"
+    action={<Link href="/eventos">Abrir bandeja ↗</Link>}>
      <AuditTrail entries={activity}/>
    </SectionSurface>}
   </div>
