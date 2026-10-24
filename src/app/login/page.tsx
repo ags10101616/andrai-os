@@ -7,9 +7,9 @@ export const metadata: Metadata = { title: 'Acceso privado' };
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; reset?: string }>;
 }) {
-  const { error } = await searchParams;
+  const { error, reset } = await searchParams;
   return <main className="auth-page">
     <section className="auth-brand">
       <div className="auth-wordmark">ANDRAI<span>.</span></div>
@@ -26,6 +26,7 @@ export default async function LoginPage({
         <h2>Bienvenido de nuevo.</h2>
         <p>Ingrese con la cuenta autorizada para ANDRAI OS. No hay registro público.</p>
         {error === 'invalid' && <div role="alert" className="auth-error">No pudimos iniciar sesión. Revise sus datos e inténtelo otra vez.</div>}
+        {reset === 'ok' && <div role="status" className="auth-notice">Contraseña guardada. Inicia sesión con la nueva.</div>}
         <form action={signInWithPassword} className="auth-form">
           <label htmlFor="login-email">Correo electrónico</label>
           <input id="login-email" type="email" name="email" autoComplete="email" inputMode="email" maxLength={254} required placeholder="correo@empresa.com" />
@@ -33,7 +34,7 @@ export default async function LoginPage({
           <input id="login-password" type="password" name="password" autoComplete="current-password" minLength={8} maxLength={1024} required />
           <button type="submit" className="auth-submit">Entrar a ANDRAI OS <span aria-hidden="true">↗</span></button>
         </form>
-        <div className="auth-notice">¿No tiene acceso o necesita recuperar su contraseña? Solicite ayuda a Dirección. Las invitaciones se gestionan de forma privada.</div>
+        <div className="auth-notice">¿Olvidaste tu contraseña? <Link href="/recuperar-acceso">Solicita un enlace de recuperación ↗</Link>. Las invitaciones se gestionan desde Dirección.</div>
         <div className="auth-footnote">
           <Link href="/diagnostico-acceso">Comprobar sesión y permisos ↗</Link>
           <p>Acceso restringido · Sesiones verificadas en Supabase · Sin acceso autónomo de agentes</p>

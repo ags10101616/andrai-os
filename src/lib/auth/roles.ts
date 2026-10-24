@@ -35,7 +35,7 @@ export function isWorkspacePath(pathname: string): boolean {
   // Invalid traversal sequences never pass this basic UX routing guard.
   return segments.length >= 1
     && !pathname.includes('..')
-    && isSection(segments[0]);
+    && (isSection(segments[0]) || segments[0] === 'agente');
 }
 
 export const roleLabels: Readonly<Record<TeamRole, string>> = {

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { resolveSession } from '@/lib/auth/session';
+import { resolveAgentSession } from '@/lib/agent/session';
 import { roleLabels } from '@/lib/auth/roles';
 import { signOut } from '@/lib/auth/actions';
 
@@ -13,6 +14,7 @@ export const metadata:Metadata={
 
 export default async function AccessDiagnosticPage(){
  const access=await resolveSession();
+ const dot=access.kind==='restricted'?await resolveAgentSession():null;
  return <main className="access-diagnostic-page">
   <section className="access-diagnostic-card">
    <div className="auth-wordmark">ANDRAI<span>.</span></div>
@@ -26,12 +28,19 @@ export default async function AccessDiagnosticPage(){
     </div>
     <Link className="access-primary-link" href="/login">Iniciar sesión ↗</Link>
    </>}
-   {access.kind==='restricted'&&<>
+   {access.kind==='restricted'&&dot?.kind!=='agent'&&<>
     <div className="access-result access-result-attention" role="status">
      <strong><span aria-hidden="true">◌</span> Sesión válida, acceso restringido</strong>
      <p>La cuenta pudo autenticarse, pero no existe una membresía activa y vinculada que permita abrir el workspace. Contacta a Dirección para revisar el acceso.</p>
     </div>
     <form action={signOut}><button type="submit" className="access-primary-link">Cerrar sesión y usar otra cuenta ↗</button></form>
+   </>}
+   {access.kind==='restricted'&&dot?.kind==='agent'&&<>
+    <div className="access-result access-result-success" role="status">
+     <strong><span aria-hidden="true">✓</span> Identidad de agente autorizada</strong>
+     <p>Esta sesión tiene permiso de solo lectura para el espacio de José Luis, sin privilegios de Dirección.</p>
+    </div>
+    <Link className="access-primary-link" href="/agente">Abrir espacio de José Luis ↗</Link>
    </>}
    {access.kind==='member'&&<>
     <div className="access-result access-result-success" role="status">
