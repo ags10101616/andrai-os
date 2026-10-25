@@ -33,7 +33,7 @@ export function AppShell({
         </>}
       </nav>
       <div className="side-bottom">
-        <div className="agent-mini"><div><span className="coral-star" aria-hidden="true">✳</span><strong>José Luis</strong><span className="inactive-circle"/></div><p>Integración pendiente. Sin credenciales ni capacidad de ejecución.</p></div>
+        <div className="agent-mini"><div><span className="coral-star" aria-hidden="true">✳</span><strong>José Luis</strong><span className="inactive-circle"/></div><p>Identidad independiente · sin acciones automáticas habilitadas.</p></div>
         <div className="profile"><div className="profile-avatar" aria-hidden="true">{displayName.slice(0,1).toUpperCase()}</div><div><strong>{displayName}</strong><small>{roleLabels[role]}</small></div></div>
         <form action={signOut}><button className="side-signout" type="submit">Cerrar sesión →</button></form>
       </div>

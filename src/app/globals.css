@@ -557,3 +557,59 @@ h1{font-size:clamp(34px,4vw,55px);line-height:1.07;letter-spacing:-.068em;font-w
 .agent-portal-footer{margin:24px 0 0;font-size:10px;line-height:1.6;color:var(--brand-secondary)}
 .agent-registry-panel{margin-top:18px}
 @media(max-width:640px){.agent-portal-top{height:auto;min-height:75px;flex-wrap:wrap;padding-top:15px;padding-bottom:15px}.agent-brand small{display:block;margin:6px 0 0}}
+
+/* OS-13 · Supervised agent suggestions / editorial decisions only */
+.proposal-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:21px 0}
+.proposal-stat{min-height:134px;padding:21px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-ivory-surface);display:flex;flex-direction:column;justify-content:space-between}
+.proposal-stat small{color:var(--brand-secondary);font-size:11px;font-weight:710}
+.proposal-stat strong{font-size:clamp(26px,2.75vw,39px);line-height:1;letter-spacing:-.07em}
+.proposal-policy{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-bottom:19px}
+.proposal-policy>div{padding:15px 19px;border:1px solid var(--brand-border);background:#fffdf9;border-radius:10px;display:grid;gap:9px}
+.proposal-policy strong{font-size:11px;letter-spacing:-.02em}
+.proposal-policy span{font-size:11px;color:var(--brand-secondary)}
+.proposal-list{margin-top:21px}
+.proposal-list>.panel-head>a{color:var(--brand-action-text);font-weight:740;font-size:11px;white-space:nowrap}
+.proposal-empty{margin:34px auto;text-align:center;max-width:460px;color:var(--brand-secondary);display:grid;justify-items:center;gap:9px}
+.proposal-empty>span{font-size:33px;color:var(--brand-coral)}
+.proposal-empty h3{font-size:21px;color:var(--brand-ink);letter-spacing:-.04em;margin:0}
+.proposal-empty p{font-size:12px;line-height:1.8}
+.proposal-cards{display:grid;gap:17px;margin-top:19px}
+.proposal-card{padding:22px;background:#fffdfb;border:1px solid var(--brand-border);border-radius:12px;min-width:0}
+.proposal-card-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:15px}
+.proposal-card h3{font-size:17px;letter-spacing:-.04em;margin:9px 0;overflow-wrap:anywhere}
+.proposal-kind{color:var(--brand-action-text);font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:760}
+.proposal-card-status{font-size:10px;white-space:nowrap;border:1px solid var(--brand-border);background:#f7f3ef;padding:8px 11px;border-radius:99px}
+.proposal-card-content{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.proposal-card-content strong{font-size:11px;display:block}
+.proposal-card-content p{font-size:12px;line-height:1.7;color:var(--brand-secondary);white-space:pre-wrap;overflow-wrap:anywhere}
+.proposal-card-meta{display:flex;flex-wrap:wrap;gap:8px 16px;margin:16px 0;font-size:10px;color:var(--brand-secondary)}
+.proposal-review-history{margin:12px 0;color:var(--brand-secondary);font-size:11px;line-height:1.7}
+.proposal-review-history strong{color:var(--brand-ink)}
+.proposal-review-form{border-top:1px solid var(--brand-border);padding-top:17px;margin-top:18px}
+.proposal-review-form fieldset,.proposal-fields{border:0;padding:0;margin:0;display:grid;gap:16px}
+.proposal-form{margin-top:18px}
+.proposal-form label,.proposal-review-form label{display:grid;gap:8px;font-size:11px;font-weight:760}
+.proposal-form input,.proposal-form textarea,.proposal-form select,.proposal-review-form textarea{width:100%;font:inherit;font-size:12px;color:var(--brand-ink);background:#fffdf9;border:1px solid var(--brand-border);border-radius:8px;padding:12px 13px;outline-offset:3px}
+.proposal-form textarea,.proposal-review-form textarea{line-height:1.65;resize:vertical;min-height:73px}
+.proposal-form input:disabled,.proposal-form textarea:disabled,.proposal-form select:disabled,.proposal-review-form textarea:disabled{opacity:.62;background:#f2eeea}
+.proposal-form .auth-submit{justify-self:start}
+.proposal-review-buttons{display:flex;gap:8px;flex-wrap:wrap}
+.proposal-review-buttons button{font:inherit;font-size:11px;font-weight:770;border:1px solid #bfa99b;border-radius:8px;background:var(--brand-obsidian);color:#fff;padding:12px 17px;cursor:pointer}
+.proposal-review-buttons button+button{background:#fffdf9;color:#784f3e}
+.proposal-review-buttons button:disabled{opacity:.42;cursor:not-allowed}
+.proposal-form-muted,.proposal-safety-warning{font-size:11px;line-height:1.7;color:var(--brand-secondary);padding:11px 14px;border:1px solid var(--brand-border);background:#fbf6f0;border-radius:8px}
+.proposal-form-error,.proposal-form-ok{font-size:11px;font-weight:710;padding:11px 14px;border-radius:8px;margin:14px 0 0}
+.proposal-form-error{color:#993c25;background:#fff2e9}
+.proposal-form-ok{color:#27633e;background:#edf8ee}
+.proposal-agent-form{margin-bottom:17px}
+.agent-proposals-history{margin-bottom:18px}
+.agent-proposals-items{list-style:none;padding:0;margin:15px 0;display:grid;gap:10px}
+.agent-proposals-items li{display:flex;gap:11px;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--brand-border);padding:12px 0}
+.agent-proposals-items li div{display:grid;gap:6px}
+.agent-proposals-items li small{color:var(--brand-action-text);font-size:10px}
+.agent-proposals-items li strong{font-size:12px}
+.agent-proposals-items li span{font-size:10px;color:var(--brand-secondary);white-space:nowrap}
+.proposal-disclaimer{padding:21px 0;margin:25px 0 0;border-top:1px solid var(--brand-border);line-height:1.8;font-size:11px;color:var(--brand-secondary)}
+.proposal-disclaimer strong{color:var(--brand-ink)}
+@media(max-width:1050px){.proposal-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.proposal-stats,.proposal-policy,.proposal-card-content{grid-template-columns:1fr}.proposal-card-heading{flex-direction:column}.proposal-card{padding:15px}.agent-proposals-items li{flex-wrap:wrap}}

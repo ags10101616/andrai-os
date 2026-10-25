@@ -16,7 +16,7 @@ export const auditActionLabels:Readonly<Record<AuditAction,string>>={
 };
 export const eventEntities=[
  'os_clients','os_opportunities','os_projects','os_tasks',
- 'os_quotes','os_quote_snapshots','os_ledger'
+ 'os_quotes','os_quote_snapshots','os_ledger','os_agent_proposals'
 ] as const;
 export type EventEntity=(typeof eventEntities)[number];
 export const eventEntityLabels:Readonly<Record<EventEntity,string>>={
@@ -27,6 +27,7 @@ export const eventEntityLabels:Readonly<Record<EventEntity,string>>={
  os_quotes:'cotización',
  os_quote_snapshots:'versión de cotización',
  os_ledger:'movimiento financiero',
+ os_agent_proposals:'propuesta de José Luis',
 };
 export type ReportingDays=7|30|90;
 export type EventMetric={key:EventClass;count:number};

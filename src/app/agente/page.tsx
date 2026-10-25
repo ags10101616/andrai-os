@@ -2,6 +2,10 @@ import type {Metadata} from 'next';
 import Link from 'next/link';
 import {requireAgentSession} from '@/lib/agent/session';
 import {loadAgentBrief} from '@/lib/agent/brief';
+import {loadAgentOwnProposals} from '@/lib/agent/proposals/data';
+import {ProposalDraftForm} from '@/components/agent/ProposalDraftForm';
+import {proposalLabels,proposalStatusLabels} from '@/lib/agent/proposals/model';
+import {isPilotReadOnly} from '@/lib/release/gates';
 import {signOut} from '@/lib/auth/actions';
 
 export const dynamic='force-dynamic';
@@ -21,7 +25,10 @@ const labels=[
 
 export default async function AgentPortal(){
  const identity=await requireAgentSession();
- const brief=await loadAgentBrief();
+ const [brief,proposals]=await Promise.all([
+  loadAgentBrief(),loadAgentOwnProposals()
+ ]);
+ const intakeEnabled=!isPilotReadOnly()&&process.env.OS13_AGENT_PROPOSALS_ENABLED==='true';
  return <div className="agent-portal">
   <header className="agent-portal-top">
    <Link href="/agente" className="agent-brand">ANDRAI<span>.</span> <small>AGENT SPACE</small></Link>
@@ -38,11 +45,17 @@ export default async function AgentPortal(){
      <small>{label}</small><strong>{brief[key]}</strong><span>{desc}</span>
     </article>)}
    </section>
-   <section className="agent-portal-panel">
-    <div className="eyebrow">PREPARACIÓN DE PROPUESTAS</div>
-    <h2>Observar primero. Proponer después.</h2>
-    <p>OS-12 habilita la consulta de indicadores. La preparación y revisión de propuestas se añadirá después con aprobación humana explícita. No hay envío de mensajes, cambios comerciales, accesos bancarios ni acciones autónomas.</p>
-    <div className="agent-portal-audit"><span>Actualizado desde la base autorizada</span><time dateTime={brief.asOf}>{new Intl.DateTimeFormat('es-MX',{timeZone:'America/Monterrey',dateStyle:'medium',timeStyle:'short'}).format(new Date(brief.asOf))}</time></div>
+   <ProposalDraftForm enabled={intakeEnabled}/>
+   <section className="agent-portal-panel agent-proposals-history">
+    <div className="eyebrow">OS-13 / HISTORIAL PERSONAL</div>
+    <h2>Propuestas enviadas</h2>
+    <p>Solo puedes consultar las sugerencias enviadas desde tu propia identidad, no las de Dirección u otros empleados.</p>
+    {proposals.length===0?<p className="proposal-form-muted">Todavía no hay propuestas registradas.</p>:
+    <ol className="agent-proposals-items">{proposals.map(proposal=><li key={proposal.id}>
+     <div><small>{proposalLabels[proposal.kind]}</small><strong>{proposal.summary}</strong></div>
+     <span>{proposalStatusLabels[proposal.status]}</span>
+    </li>)}</ol>}
+    <div className="agent-portal-audit"><span>Indicadores consultados en Supabase</span><time dateTime={brief.asOf}>{new Intl.DateTimeFormat('es-MX',{timeZone:'America/Monterrey',dateStyle:'medium',timeStyle:'short'}).format(new Date(brief.asOf))}</time></div>
    </section>
    <p className="agent-portal-footer">Agente: José Luis · Sesión independiente · Sin datos personales ni información financiera en el resumen.</p>
   </main>
