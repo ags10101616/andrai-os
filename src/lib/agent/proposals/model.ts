@@ -81,5 +81,5 @@ export function parseProposals(raw:unknown):AgentProposal[]{
  });
 }
 export function isExpiredUnreviewed(proposal:AgentProposal,now:string):boolean{
- return proposal.status==='proposed'&&proposal.expiresAt<now;
+ return proposal.status==='proposed'&&Date.parse(proposal.expiresAt)<Date.parse(now);
 }

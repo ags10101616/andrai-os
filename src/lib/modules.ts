@@ -5,7 +5,7 @@ export const modules = [
   { slug:'cotizaciones', label:'Cotizaciones', icon:'▤', kicker:'VENTAS / PROPUESTAS', title:'Propuestas con claridad.', description:'Versiones, alcance, precios, aprobación y aceptación.', spec:'OS-07' },
   { slug:'tareas', label:'Tareas', icon:'☑', kicker:'OPERACIÓN / PRIORIDADES', title:'Lo que sigue, siempre claro.', description:'Tareas, fechas y responsabilidades sin pérdida de contexto.', spec:'OS-06' },
   { slug:'finanzas', label:'Finanzas', icon:'◫', kicker:'DIRECCIÓN / CONTROL', title:'El negocio en números.', description:'Anticipos, cuentas por cobrar, movimientos y recurrencia.', spec:'OS-08' },
-  { slug:'jose-luis', label:'José Luis', icon:'✳', kicker:'INTELIGENCIA / SUPERVISIÓN', title:'Una operación más atenta.', description:'Resúmenes, alertas y acciones propuestas bajo supervisión humana.', spec:'OS-12' },
+  { slug:'jose-luis', label:'José Luis', icon:'✳', kicker:'INTELIGENCIA / SUPERVISIÓN', title:'Una operación más atenta.', description:'Bandeja de sugerencias auditadas y decisiones de Dirección, sin ejecución.', spec:'OS-13' },
 ] as const;
 export type ModuleSlug = (typeof modules)[number]['slug'];
 export function findModule(slug: string) { return modules.find(m=>m.slug===slug); }
