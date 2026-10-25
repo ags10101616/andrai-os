@@ -14,13 +14,19 @@ begin
    and qual like '%bound_user_id%') then
   raise exception 'Agent self/owner RLS equivalence not present';
  end if;
+ if not exists(select 1 from pg_policies where schemaname='public'
+   and tablename='os_agent_proposals' and policyname='os14_proposal_owner_or_agent_read'
+   and qual like '%member_role%' and qual like '%created_by_uid%'
+   and qual like '%agent_identity_id%') then
+  raise exception 'Owner/agent proposal OR policy missing';
+ end if;
  if exists(select 1 from pg_policies where schemaname='public'
    and tablename='os_agent_proposals' and policyname='os_agent_owner_read') then
   raise exception 'Duplicate owner proposal policy survived';
  end if;
  if (select count(*) from pg_policies where schemaname='public'
-   and tablename='os_agent_proposals' and cmd='SELECT') <> 2 then
-  raise exception 'Proposal SELECT policies not limited to owner and author';
+   and tablename='os_agent_proposals' and cmd='SELECT') <> 1 then
+  raise exception 'Proposal SELECT should be one exact OR policy';
  end if;
  select count(*) into v_count from pg_indexes
   where schemaname='public' and indexname=any(array[

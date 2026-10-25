@@ -44,3 +44,11 @@ migration if necessary. Do not edit completed migration history.
 No merge to main; no payments, email, automated messages, data ingestion or CRM writes.
 No new Supabase staging instance (would require cost confirmation). Repo visibility
 remains a separate owner decision; do not publish secrets while public.
+
+## Follow-up OS-14B — exact proposal SELECT OR policy
+The initial OS14 optimization removed one redundant owner policy. A follow-up
+advisor still reported two permissive SELECT policies on proposals, each
+legitimate but performance-suboptimal. In OS14B, these exact two predicates
+are preserved as one OR policy. A dedicated versioned migration and rollback
+template are provided. Assert only one policy remains and re-run OS13 isolation
+and expiry fixtures. Apply OS14B rollback before OS14A rollback if necessary.
