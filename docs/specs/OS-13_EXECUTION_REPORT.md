@@ -33,3 +33,14 @@ PR: https://github.com/ags10101616/andrai-os/pull/13
 - No merge to main, production promotion, commercial writes or automated dispatch.
 
 Verdict: technical proposal/review slice staged under zero-write pilot gates; operational activation NOT authorized.
+
+## Additional verification — 24 Oct 2026
+- Independent cross-tenant rollback test PASS, including authorization to review and isolation of held events.
+- Expired-review rollback test PASS: a suggestion past its expiry cannot be approved; owner may reject it with an audit note.
+- CI on commit a044835978ce530203f22de310f76f1bbc9ac3d5 PASS (GitHub run 40151907004).
+- Vercel current OS-13 deployment on ca197440f534ff0e18590f8af8b76e4bd7cf8316 failed due a TypeScript response-shape error; code was fixed and the corrected commit passed GitHub CI.
+- A new Vercel preview deployment attempt was rejected with HTTP 402, code `api-deployments-free-per-day`, quota more than 100 per day. **Do not claim OS-13 has a ready preview on the latest commit.**
+- The prior READY preview on a1127419 lacks OS-13 owner/agent UI; do not hand it to users as a new interface.
+- Review/intake flags OFF in both database and branch-scoped Vercel env; agent account remains brief_read-only.
+
+**Delivery state:** SQL and CI validated; fresh Vercel preview and authenticated-browser E2E blocked for operational reasons. No merge to main.
