@@ -81,7 +81,7 @@ export default async function OwnerAgentDashboard(){
    </div>}
   </section>
   <div className="proposal-disclaimer">
-   **Aprobación editorial, no ejecución.** Una idea aprobada no crea registros,
+   <strong>Aprobación editorial, no ejecución.</strong> Una idea aprobada no crea registros,
    no manda correos, no cambia precios y no autoriza a José Luis a operar herramientas externas.
    El repo continúa en una rama de revisión y las escrituras comerciales están desactivadas.
   </div>
