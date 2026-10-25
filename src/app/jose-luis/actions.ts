@@ -40,7 +40,10 @@ export async function reviewSuggestion(
    if(error.code==='22023')return {status:'error',message:'La decisión no supera la validación.'};
    throw error;
   }
-  if(!data||data.new_status!==decision)
+  const result:Record<string,unknown>|null=
+   data&&typeof data==='object'&&!Array.isArray(data)
+    ?(data as Record<string,unknown>):null;
+  if(!result||result.new_status!==decision)
    throw new Error('Unexpected review result');
   revalidatePath('/jose-luis');
   revalidatePath('/agente');
