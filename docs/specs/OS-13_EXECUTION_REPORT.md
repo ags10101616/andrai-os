@@ -44,3 +44,11 @@ Verdict: technical proposal/review slice staged under zero-write pilot gates; op
 - Review/intake flags OFF in both database and branch-scoped Vercel env; agent account remains brief_read-only.
 
 **Delivery state:** SQL and CI validated; fresh Vercel preview and authenticated-browser E2E blocked for operational reasons. No merge to main.
+## Verification update — 25 Oct 2026
+- A fresh Vercel preview was deployed successfully for exact commit `95ee4309a274ef434b6fb0d78b210cc01d996613` on `feature/os-13`: deployment `dpl_EEtj3ZTc87TovmX1L2KtpZiejxzW`, state READY, `https://andrai-hfr6k65w0-ags10101616s-projects.vercel.app`.
+- Build logs confirmed Next.js production compilation and TypeScript checks completed successfully. GitHub commit status includes Vercel success. This resolves the previously documented missing-current-preview gate, NOT the authenticated E2E/security release gates.
+- `main...feature/os-13` comparison shows branch ahead by 99 commits, behind by 0 as of this verification. The branch contains stacked OS-02 through OS-13 work, not just an isolated OS-13 change. Review integration sequencing before any merge.
+- Pending: signed-in owner and agent browser E2E, role isolation/revocation in real sessions, recovery URL configuration, independent staging and backup/restore drills, repository visibility/security review, and explicit owner release decision.
+- Keep `OS10_PILOT_READ_ONLY` enabled, OS05–08 writes disabled, OS13 intake/review flags OFF, and José Luis brief_read-only. No commercial writes, autonomous execution, production promotion, or merge was performed by this verification.
+
+**Updated delivery state:** latest OS-13 branch preview READY and build verified; operational activation NOT authorized.
