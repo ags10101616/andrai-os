@@ -76,9 +76,8 @@ begin
  then raise exception 'Proposal source brief leaked sensitive keys';end if;
  if exists(select 1 from public.os_agent_proposals where status<>'proposed')
  then raise exception 'Proposals not in proposed state';end if;
- select count(*) into v_n from public.os_event_outbox
-  where entity_type='os_agent_proposals' and dispatch_state='held';
- if v_n<>2 then raise exception 'Audit/outbox did not capture two proposal inserts';end if;
+ select count(*) into v_n from public.os_event_outbox;
+ if v_n<>0 then raise exception 'Agent can see owner-only audit outbox';end if;
 
  -- Eight total proposals allowed per local day; ninth denied.
  for i in 1..6 loop
@@ -158,6 +157,10 @@ begin
  where entity_type='os_agent_proposals' and source_action='UPDATE'
    and dispatch_state='held';
  if v_version<>2 then raise exception 'Review updates not audited';end if;
+ select count(*) into v_version from public.os_event_outbox
+ where entity_type='os_agent_proposals' and source_action='INSERT'
+   and dispatch_state='held';
+ if v_version<>8 then raise exception 'Eight agent submission events not captured';end if;
 end $owner$;
 
 -- Role-change negative tests. Both changes are reverted at ROLLBACK.
