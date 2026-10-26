@@ -36,3 +36,11 @@ These MUST NOT be stated as PASS unless actually verified.
 Revert code branch/PR or set OS10 flag to read-only and redeploy the preview.
 Records entered after activation are real and are **not** undone by a code
 rollback. Preserve and export records before restoring or switching branches.
+
+## Pilot activation decision — scope and safeguards
+- The owner expressly requested beginning actual use; SQL fixtures OS03..OS14 (16) PASS and OS16 follow-up/audit/unauthorized rollback fixture PASS.
+- A confirmed, bound owner account was independently visible in the authenticated OS15 browser tab. Only one active human staff member existed in the DB before activation.
+- A new, SSO-protected OS16 preview has 9 branch-scoped Vercel env vars. Dedicated OS05/06/07/08 manual writes were staged true *while OS10 global read-only remained true*, then OS10 was changed to false. OS13 agent flags remain false.
+- After Vercel redeployment, verify its exact SHA and `/api/health` shows `private-pilot-manual-entry`; this is pilot activation, NOT production G4.
+- Real signed-in form submit from a browser remains NOT RUN by the agent; the owner should use first creation as a monitored smoke. Auth recovery/backup, leaked-password protection and private repo decision are still outstanding.
+- Revert instructions: OS10=true and force a new protected preview deployment. Data already entered are real, persist, and are not deleted by rollback.
