@@ -1,5 +1,7 @@
 import { isPilotReadOnly } from '@/lib/release/gates';
 import Link from 'next/link';
+import { WorkspaceMotion } from '@/components/motion/WorkspaceMotion';
+import { WorkspacePreferences } from '@/components/motion/WorkspacePreferences';
 import type { ReactNode } from 'react';
 import { modules } from '@/lib/modules';
 import { signOut } from '@/lib/auth/actions';
@@ -39,8 +41,8 @@ export function AppShell({
       </div>
     </aside>
     <div className="main-area">
-      <header className="header"><span>ANDRAI <i>/</i> WORKSPACE</span><div><span className="env-pill"><b/> {isPilotReadOnly()?'PILOTO · SOLO LECTURA':'ACCESO PRIVADO'}</span><span className="edition">{roleLabels[role]} · Spectral Ember</span></div></header>
-      <main id="workspace-main" tabIndex={-1} className="main-content">{children}</main>
+      <header className="header"><span>ANDRAI <i>/</i> WORKSPACE</span><div><span className="env-pill"><b/> {isPilotReadOnly()?'PILOTO · SOLO LECTURA':'ACCESO PRIVADO'}</span><span className="edition">{roleLabels[role]} · Spectral Ember</span><WorkspacePreferences/></div></header>
+      <main id="workspace-main" tabIndex={-1} className="main-content"><WorkspaceMotion/>{children}</main>
       <footer className="footer"><span>ANDRAI OS · OPERACIÓN PRIVADA</span><span>Identidad y rol verificados · Datos operativos pendientes</span></footer>
     </div>
   </div>;

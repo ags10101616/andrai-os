@@ -1,6 +1,7 @@
 import { isPilotReadOnly } from '@/lib/release/gates';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import {QuotePresentation} from '@/components/quotes/QuotePresentation';
 import { notFound } from 'next/navigation';
 import { AppShell } from '@/components/AppShell';
 import { QuoteDraftForm } from '@/components/quotes/QuoteDraftForm';
@@ -45,7 +46,11 @@ export default async function QuoteDetailPage({params}:{
   </div><a className="quote-download" href={'/cotizaciones/'+quote.id+'/pdf'}>
     Descargar PDF ↗</a></section>
 
-  <section className="panel quote-detail">
+  <QuotePresentation><section className="panel quote-detail">
+   <div className="lp-document-header">
+    <span className="lp-document-wordmark">ANDRAI<span>.</span></span>
+    <small>ESTUDIO DE SISTEMAS DIGITALES<br/>{quoteShortCode(quote.id,quote.version)} · V{quote.version}</small>
+   </div>
    <div className="quote-detail-summary">
     <div><small>Estado</small><span className={'quote-state quote-state-'+quote.status}>{quoteLabels[quote.status]}</span></div>
     <div><small>Versión</small><strong>V{quote.version}</strong></div>
@@ -71,7 +76,7 @@ export default async function QuoteDetailPage({params}:{
     <p>{quote.notes||'Sin notas adicionales. El alcance se limita a los conceptos desglosados.'}</p>
     <small>Esta cotización no es un CFDI. La aceptación del cliente debe documentarse por separado.</small>
    </div>
-  </section>
+  </section></QuotePresentation>
 
   {actions.length>0&&<section className="panel quote-decisions">
    <div className="panel-head"><div><h2>Revisión y aprobación</h2>

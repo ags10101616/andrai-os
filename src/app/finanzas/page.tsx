@@ -1,6 +1,7 @@
 import { isPilotReadOnly } from '@/lib/release/gates';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import {AnimatedValue} from '@/components/motion/AnimatedValue';
 import { AppShell } from '@/components/AppShell';
 import { ManualEntryForm } from '@/components/finance/ManualEntryForm';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -19,7 +20,7 @@ export const revalidate=0;
 function metric(label:string,value:number,helper:string){
  return <article className="metric" key={label}>
   <span>{label}</span>
-  <strong className="finance-metric-value">{signedMoneyMXN(value)}</strong>
+  <strong className="finance-metric-value"><AnimatedValue value={value} display={signedMoneyMXN(value)} mode="money"/></strong>
   <small>{helper}</small>
   <div className="tiny-line" aria-hidden="true"/>
  </article>;
