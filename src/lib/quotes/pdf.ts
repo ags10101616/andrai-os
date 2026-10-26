@@ -30,7 +30,22 @@ function localDate(date:string|null):string {
  }).format(d);
 }
 
-export async function renderQuotePdf(quote:QuoteDetail):Promise<Uint8Array> {
+export type QuotePdfAppearance='statement'|'atelier';
+/** Uses the same versioned quote and exact monetary values in both templates. */
+export async function renderQuotePdf(
+ quote:QuoteDetail,appearance:QuotePdfAppearance='statement'
+):Promise<Uint8Array> {
+ const atelier=appearance==='atelier';
+ const themeInk=atelier?rgb(.953,.943,.916):INK;
+ const themeMuted=atelier?rgb(.77,.8,.74):GREY;
+ const themeFaint=atelier?rgb(.32,.36,.32):FAINT;
+ const themeCoral=atelier?rgb(1,.62,.45):CORAL;
+ const themeIvory=IVORY;
+ const themeBlack=atelier?rgb(.125,.145,.125):BLACK;
+ const pageSurface=rgb(.090,.108,.095);
+ const rowSurface=atelier?rgb(.16,.19,.16):rgb(.976,.968,.952);
+ const totalInk=INK;
+
  const pdf=await PDFDocument.create();
  pdf.setTitle(printable('ANDRAI - Cotización '+quote.title));
  pdf.setAuthor('ANDRAI · Estudio de sistemas digitales');
@@ -38,6 +53,7 @@ export async function renderQuotePdf(quote:QuoteDetail):Promise<Uint8Array> {
  pdf.setCreator('ANDRAI OS / OS-07');
  const regular=await pdf.embedFont(StandardFonts.Helvetica);
  const bold=await pdf.embedFont(StandardFonts.HelveticaBold);
+ const displayFont=atelier?await pdf.embedFont(StandardFonts.TimesRoman):regular;
  const pages:ReturnType<typeof pdf.addPage>[]=[];
  const label=printable('COT-'+quote.id.replaceAll('-','').slice(0,8).toUpperCase()+'  /  V'+quote.version);
  const state=quote.status==='draft'||quote.status==='review'?'BORRADOR · NO ENVIAR':
@@ -45,28 +61,30 @@ export async function renderQuotePdf(quote:QuoteDetail):Promise<Uint8Array> {
   quote.status==='sent'?'ENVÍO REGISTRADO':
   quote.status==='accepted'?'ACEPTACIÓN REGISTRADA':'RECHAZO REGISTRADO';
  let page=pdf.addPage([PAGE_W,PAGE_H]);
+ if(atelier)page.drawRectangle({x:0,y:0,width:PAGE_W,height:PAGE_H,color:pageSurface});
  let y=PAGE_H-143;
  function newPage(continuation=false):void {
   page=pdf.addPage([PAGE_W,PAGE_H]);
   pages.push(page);
-  page.drawRectangle({x:0,y:PAGE_H-95,width:PAGE_W,height:95,color:BLACK});
-  page.drawText('ANDRAI',{x:LEFT,y:PAGE_H-55,size:23,font:bold,color:IVORY});
-  page.drawCircle({x:148,y:PAGE_H-49,size:3,color:CORAL});
+  if(atelier)page.drawRectangle({x:0,y:0,width:PAGE_W,height:PAGE_H,color:pageSurface});
+  page.drawRectangle({x:0,y:PAGE_H-95,width:PAGE_W,height:95,color:themeBlack});
+  page.drawText('ANDRAI',{x:LEFT,y:PAGE_H-55,size:23,font:bold,color:themeIvory});
+  page.drawCircle({x:148,y:PAGE_H-49,size:3,color:themeCoral});
   page.drawText('ESTUDIO DE SISTEMAS DIGITALES',{
    x:LEFT,y:PAGE_H-76,size:8.5,font:regular,color:rgb(.72,.74,.72)
   });
-  right(continuation?'COTIZACIÓN · CONTINUACIÓN':'COTIZACIÓN',RIGHT,PAGE_H-51,regular,10,IVORY);
+  right(continuation?'COTIZACIÓN · CONTINUACIÓN':'COTIZACIÓN',RIGHT,PAGE_H-51,regular,10,themeIvory);
   right(label,RIGHT,PAGE_H-72,regular,8.5,rgb(.79,.78,.75));
   y=PAGE_H-126;
  }
- function right(text:string,atX:number,atY:number,font:typeof regular,size:number,color=INK){
+ function right(text:string,atX:number,atY:number,font:typeof regular,size:number,color=themeInk){
   const safe=printable(text);
   page.drawText(safe,{x:atX-font.widthOfTextAtSize(safe,size),y:atY,font,size,color});
  }
- function textAt(text:string,atX:number,atY:number,size:number,font=regular,color=INK){
+ function textAt(text:string,atX:number,atY:number,size:number,font=regular,color=themeInk){
   page.drawText(printable(text),{x:atX,y:atY,size,font,color});
  }
- function rule(atY:number,color=FAINT){
+ function rule(atY:number,color=themeFaint){
   page.drawLine({start:{x:LEFT,y:atY},end:{x:RIGHT,y:atY},color,thickness:.75});
  }
  function wrap(text:string,maxWidth:number,font=regular,size=10):string[]{
@@ -94,44 +112,44 @@ export async function renderQuotePdf(quote:QuoteDetail):Promise<Uint8Array> {
  function ensure(height:number):void{
   if(y-height<74)newPage(true);
  }
- function paragraph(text:string,width:number,atX:number,size=10,lineHeight=15,color=INK){
-  const lines=wrap(text,width,regular,size);
+ function paragraph(text:string,width:number,atX:number,size=10,lineHeight=15,color=themeInk,font=regular){
+  const lines=wrap(text,width,font,size);
   for(const line of lines){
    ensure(lineHeight);
-   textAt(line,atX,y,size,regular,color);
+   textAt(line,atX,y,size,font,color);
    y-=lineHeight;
   }
  }
  // The page helper draws a new page when needed; start with the same header.
  pages.push(page);
- page.drawRectangle({x:0,y:PAGE_H-95,width:PAGE_W,height:95,color:BLACK});
- page.drawText('ANDRAI',{x:LEFT,y:PAGE_H-55,size:23,font:bold,color:IVORY});
- page.drawCircle({x:148,y:PAGE_H-49,size:3,color:CORAL});
+ page.drawRectangle({x:0,y:PAGE_H-95,width:PAGE_W,height:95,color:themeBlack});
+ page.drawText('ANDRAI',{x:LEFT,y:PAGE_H-55,size:23,font:bold,color:themeIvory});
+ page.drawCircle({x:148,y:PAGE_H-49,size:3,color:themeCoral});
  page.drawText('ESTUDIO DE SISTEMAS DIGITALES',{
   x:LEFT,y:PAGE_H-76,size:8.5,font:regular,color:rgb(.72,.74,.72)
  });
- right('COTIZACIÓN',RIGHT,PAGE_H-51,regular,10,IVORY);
+ right('COTIZACIÓN',RIGHT,PAGE_H-51,regular,10,themeIvory);
  right(label,RIGHT,PAGE_H-72,regular,8.5,rgb(.79,.78,.75));
 
- textAt('PROPUESTA COMERCIAL',LEFT,y,9,bold,CORAL);y-=26;
- paragraph(quote.title,RIGHT-LEFT,LEFT,21,27,INK);
+ textAt('PROPUESTA COMERCIAL',LEFT,y,9,bold,themeCoral);y-=26;
+ paragraph(quote.title,RIGHT-LEFT,LEFT,atelier?23:21,atelier?29:27,themeInk,displayFont);
  y-=3;
  const clientText='PARA  '+quote.clientName;
- paragraph(clientText,RIGHT-LEFT,LEFT,12,17,GREY);
+ paragraph(clientText,RIGHT-LEFT,LEFT,12,17,themeMuted);
  y-=14;
  rule(y);y-=23;
- textAt('VERSIÓN  '+quote.version,LEFT,y,9,bold,GREY);
- right('VIGENCIA  '+localDate(quote.validUntil),RIGHT,y,regular,9,GREY);y-=19;
- textAt(printable(state),LEFT,y,9,bold,quote.status==='draft'||quote.status==='review'?CORAL:GREY);
+ textAt('VERSIÓN  '+quote.version,LEFT,y,9,bold,themeMuted);
+ right('VIGENCIA  '+localDate(quote.validUntil),RIGHT,y,regular,9,themeMuted);y-=19;
+ textAt(printable(state),LEFT,y,9,bold,quote.status==='draft'||quote.status==='review'?themeCoral:themeMuted);
  y-=24;
 
  function itemHead(){
   ensure(34);
-  page.drawRectangle({x:LEFT,y:y-17,width:RIGHT-LEFT,height:27,color:BLACK});
-  textAt('ALCANCE / CONCEPTO',LEFT+12,y-9,8,bold,IVORY);
-  right('CANT.',355,y-9,regular,8,IVORY);
-  right('PRECIO',445,y-9,regular,8,IVORY);
-  right('IMPORTE',RIGHT-11,y-9,regular,8,IVORY);
+  page.drawRectangle({x:LEFT,y:y-17,width:RIGHT-LEFT,height:27,color:themeBlack});
+  textAt('ALCANCE / CONCEPTO',LEFT+12,y-9,8,bold,themeIvory);
+  right('CANT.',355,y-9,regular,8,themeIvory);
+  right('PRECIO',445,y-9,regular,8,themeIvory);
+  right('IMPORTE',RIGHT-11,y-9,regular,8,themeIvory);
   y-=31;
  }
  itemHead();
@@ -144,42 +162,42 @@ export async function renderQuotePdf(quote:QuoteDetail):Promise<Uint8Array> {
    newPage(true);
    itemHead();
   }
-  if(index%2===1)page.drawRectangle({x:LEFT,y:y-height+7,width:RIGHT-LEFT,height:height-5,color:rgb(.976,.968,.952)});
+  if(index%2===1)page.drawRectangle({x:LEFT,y:y-height+7,width:RIGHT-LEFT,height:height-5,color:rowSurface});
   let offset=0;
   for(const t of titleLines){textAt(t,LEFT+11,y-13-offset,10,bold);offset+=lineHeight;}
-  for(const t of detailLines){textAt(t,LEFT+11,y-13-offset,9,regular,GREY);offset+=detailHeight;}
+  for(const t of detailLines){textAt(t,LEFT+11,y-13-offset,9,regular,themeMuted);offset+=detailHeight;}
   right(String(line.quantity),355,y-15,regular,9);
   right(currency(line.unit_minor),445,y-15,regular,9);
   right(currency(line.unit_minor*line.quantity),RIGHT-11,y-15,bold,9);
   y-=height;
-  rule(y+7,rgb(.91,.89,.87));
+  rule(y+7,themeFaint);
  });
  y-=18;
  ensure(118);
  const amountX=RIGHT-5;
- right('Subtotal',RIGHT-155,y,regular,10,GREY);
+ right('Subtotal',RIGHT-155,y,regular,10,themeMuted);
  right(currency(quote.subtotalMinor),amountX,y,bold,11);y-=22;
- right(quote.taxRateBps===1600?'IVA (16 %)':'IVA (0 %)',RIGHT-155,y,regular,10,GREY);
+ right(quote.taxRateBps===1600?'IVA (16 %)':'IVA (0 %)',RIGHT-155,y,regular,10,themeMuted);
  right(currency(quote.taxMinor),amountX,y,bold,11);y-=22;
- page.drawRectangle({x:RIGHT-295,y:y-19,width:295,height:40,color:IVORY});
- right('TOTAL MXN',RIGHT-155,y,bold,10,INK);
- right(currency(quote.totalMinor),amountX,y-2,bold,16,INK);
+ page.drawRectangle({x:RIGHT-295,y:y-19,width:295,height:40,color:themeIvory});
+ right('TOTAL MXN',RIGHT-155,y,bold,10,totalInk);
+ right(currency(quote.totalMinor),amountX,y-2,bold,16,totalInk);
  y-=58;
  ensure(70);
- textAt('CONDICIONES / ALCANCE',LEFT,y,9,bold,CORAL);y-=20;
- paragraph(quote.notes?.trim()||'Sin notas adicionales. Alcance limitado a los conceptos descritos en esta cotización.',RIGHT-LEFT,LEFT,10,15,GREY);
+ textAt('CONDICIONES / ALCANCE',LEFT,y,9,bold,themeCoral);y-=20;
+ paragraph(quote.notes?.trim()||'Sin notas adicionales. Alcance limitado a los conceptos descritos en esta cotización.',RIGHT-LEFT,LEFT,10,15,themeMuted);
  y-=22;
  ensure(50);
  rule(y);y-=19;
- paragraph('Esta cotización no es un CFDI ni sustituye un contrato. La aprobación es interna y la aceptación del cliente debe documentarse por separado.',RIGHT-LEFT,LEFT,8.5,13,GREY);
+ paragraph('Esta cotización no es un CFDI ni sustituye un contrato. La aprobación es interna y la aceptación del cliente debe documentarse por separado.',RIGHT-LEFT,LEFT,8.5,13,themeMuted);
  for(let i=0;i<pages.length;i++){
   const pg=pages[i];
-  pg.drawLine({start:{x:LEFT,y:52},end:{x:RIGHT,y:52},color:FAINT,thickness:1});
+  pg.drawLine({start:{x:LEFT,y:52},end:{x:RIGHT,y:52},color:themeFaint,thickness:1});
   pg.drawText('ANDRAI · DISEÑO QUE CONECTA. SISTEMAS QUE FUNCIONAN.',{
-   x:LEFT,y:34,font:regular,size:7.5,color:GREY,
+   x:LEFT,y:34,font:regular,size:7.5,color:themeMuted,
   });
   const pagination=String(i+1)+' / '+String(pages.length);
-  pg.drawText(pagination,{x:RIGHT-bold.widthOfTextAtSize(pagination,8),y:34,font:bold,size:8,color:GREY});
+  pg.drawText(pagination,{x:RIGHT-bold.widthOfTextAtSize(pagination,8),y:34,font:bold,size:8,color:themeMuted});
  }
  return await pdf.save();
 }

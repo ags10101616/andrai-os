@@ -38,4 +38,13 @@ test('Render real A4 PDFs, including multiple pages and synthetic character acce
  const large=await renderQuotePdf(syntheticQuote(24));
  const longDoc=await PDFDocument.load(large);
  assert.ok(longDoc.getPageCount()>1,'24 long quote lines must paginate');
+ const atelier=await renderQuotePdf(syntheticQuote(2),'atelier');
+ assert.equal(String.fromCharCode(...atelier.slice(0,5)),'%PDF-');
+ const atelierDoc=await PDFDocument.load(atelier);
+ assert.equal(atelierDoc.getPageCount(),doc.getPageCount());
+ writeFileSync('tests/artifacts/os15-quote-atelier.pdf',atelier);
+ const atelierLarge=await renderQuotePdf(syntheticQuote(24),'atelier');
+ const atelierLongDoc=await PDFDocument.load(atelierLarge);
+ assert.ok(atelierLongDoc.getPageCount()>1,'Atelier must preserve pagination');
+ assert.equal(atelierDoc.getTitle()?.includes('Cotización'),true);
 });

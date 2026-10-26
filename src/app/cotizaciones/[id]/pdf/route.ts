@@ -8,7 +8,7 @@ export const dynamic='force-dynamic';
 export const revalidate=0;
 
 export async function GET(
- _request:Request,
+ request:Request,
  {params}:{params:Promise<{id:string}>}
 ):Promise<Response>{
  const {id}=await params;
@@ -16,8 +16,11 @@ export async function GET(
  // The data function performs server session+role checks and queries with RLS.
  const quote=await getQuoteDetail(id);
  if(!quote)notFound();
- const bytes=await renderQuotePdf(quote);
- const name='ANDRAI-COT-'+id.replaceAll('-','').slice(0,8).toUpperCase()+'-V'+quote.version+'.pdf';
+ const appearance=new URL(request.url).searchParams.get('style')==='atelier'
+  ?'atelier':'statement';
+ const bytes=await renderQuotePdf(quote,appearance);
+ const name='ANDRAI-COT-'+id.replaceAll('-','').slice(0,8).toUpperCase()
+  +'-V'+quote.version+(appearance==='atelier'?'-ATELIER':'')+'.pdf';
  return new Response(new Uint8Array(bytes),{
   status:200,
   headers:{
