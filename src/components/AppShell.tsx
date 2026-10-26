@@ -41,7 +41,7 @@ export function AppShell({
       </div>
     </aside>
     <div className="main-area">
-      <header className="header"><span>ANDRAI <i>/</i> WORKSPACE</span><div><span className="env-pill"><b/> {isPilotReadOnly()?'PILOTO · SOLO LECTURA':'ACCESO PRIVADO'}</span><span className="edition">{roleLabels[role]} · Spectral Ember</span><WorkspacePreferences/></div></header>
+      <header className="header"><span>ANDRAI <i>/</i> WORKSPACE</span><div><span className="env-pill"><b/> {isPilotReadOnly()?'PILOTO · SOLO LECTURA':'PILOTO PRIVADO · CAPTURA MANUAL'}</span><span className="edition">{roleLabels[role]} · Spectral Ember</span><WorkspacePreferences/></div></header>
       <main id="workspace-main" tabIndex={-1} className="main-content"><WorkspaceMotion/>{children}</main>
       <footer className="footer"><span>ANDRAI OS · OPERACIÓN PRIVADA</span><span>Identidad y rol verificados · Datos operativos pendientes</span></footer>
     </div>

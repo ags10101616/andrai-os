@@ -1,53 +1,72 @@
-# ANDRAI OS — Internal agency operating system
+# ANDRAI OS — Private Operational Pilot (OS-16)
 
-**Current development:** OS-13 supervised agent proposals, plus OS-14 hardening in
-`feature/os-14-hardening`. This is a protected, read-only **pilot**;
-it is not an operationally approved or production-ready CRM.
+**Current live pilot branch:** `feature/os-16-private-pilot`. This is a
+protected internal preview for real manual data entry by authorized team roles,
+NOT a public release, payment processor, automatic invoicing platform or
+autonomous agent deployment.
 
-## Product
-ANDRAI OS is a Next.js 16 / React 19 / TypeScript / Supabase application using
-the Spectral Ember design system. It contains authenticated, role-scoped modules
-for CRM prospects, projects, tasks, quotes/PDFs, a manual finance ledger,
-executive reporting, team access, an event/audit feed, and owner-only José Luis
-supervision. The independent José Luis agent has an isolated aggregate-only
-briefing portal. OS-13 can draft and review proposals in its implementation,
-but **all gates remain disabled**, and approval never executes a proposal.
+**Preview:** https://andrai-os-git-feature-os-16-private-pilot-ags10101616s-projects.vercel.app
 
-## Development and quality
-Requires Node >=22.12 and npm with the pinned `package-lock.json`.
+## Start using ANDRAI OS
+1. Open the protected preview, pass Vercel SSO, sign in with your
+   existing authorized ANDRAI OS account. No public self-registration.
+2. **Resumen:** view the real agency indicators and first-use guide.
+3. **Prospectos:** create your first client/opportunity, then click the
+   client name to update pipeline stage, next follow-up/date and estimated value.
+4. **Proyectos / Tareas:** create a project for an existing client,
+   assign work and update progress according to your role.
+5. **Cotizaciones:** create versioned proposals, review with Direction and
+   export either Statement or Atelier PDFs. PDF is not a fiscal CFDI.
+6. **Finanzas:** manually register internal receipts and expenses where
+   authorized. This is not bank reconciliation or a real payment.
+7. **Equipo y permisos:** review the limited member list and download
+   an owner-scoped commercial JSON data export. This export **is not** a
+   managed PostgreSQL backup/restore procedure. Keep the file private.
 
-```bash
+All records entered from the protected pilot are **real records stored in
+Supabase**, not demo fixtures. Abandoning the branch does not erase them.
+A status badge says `PILOTO PRIVADO · CAPTURA MANUAL` when the global
+kill switch and module-specific gates are enabled. A `/api/health` check
+reports HTTP liveness and mode, not complete database or Auth readiness.
+
+## Architecture and quality
+Next.js 16, React 19, TypeScript 6, Supabase SSR/PostgreSQL RLS,
+Tailwind 4 and Spectral Ember Liquid Precision. Node >=22.12.
+Dependencies pinned in `package-lock.json`.
+
+```sh
 npm ci
-# Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY locally.
-# Never use service_role credentials in client code or commit them.
 npm run quality
 ```
 
-GitHub Actions runs a reproducible install, lint, TypeScript, unit tests,
-Next.js build and npm audit. Vercel previews use SSO protection. Route
-`/api/health` tests HTTP liveness ONLY; it is not proof of authenticated
-workspace, write integrity, or Supabase backup recovery.
+The repository has tests for authentication constraints, role isolation,
+CRM transactional writes, projects/tasks, quote versioning/PDF, manual
+finance ledger, events, agent limitations and display-only motion.
+SQL QA fixtures in `tests/postgres` end with ROLLBACK and should be run
+only against the isolated ANDRAI OS database with the stated permissions.
+Never execute synthetic INSERT tests against customer systems.
 
-## Safe release rules
-- Development branches stack from OS-02 through OS-14. Review each draft PR in order;
-  **do not merge the whole 99+-commit stack into main merely because a preview builds**.
-- `OS10_PILOT_READ_ONLY` stays true. OS05/06/07/08 commercial-write flags remain false.
-- OS13 proposal intake and editorial review flags remain false in both the database
-  and Vercel; agent capability `proposal_draft` is not granted.
-- No client, payment, accounting, email or external dispatch automations are enabled.
-- Human owner and agent E2E, Auth recovery URL configuration, leaked-password
-  protection, staging backup/restore, visual/a11y checks and owner release sign-off
-  must precede any operational launch.
-- The repository is currently **public by prior owner choice**: do not include client
-  data, sensitive identifiers or any key material. Re-evaluate Private visibility
-  before inviting more collaborators or storing internal operational details.
+## Hard safety constraints
+- Only a **branch-specific protected preview** may run user-approved
+  manual capture; main and production promotion remain gated.
+- Supabase row-level authorization is always enforced; flag variables
+  only gate whether a user is allowed to attempt a mutation.
+- The preview may enable `OS10_PILOT_READ_ONLY=false` plus
+  OS05/OS06/OS07/OS08 manual write flags. OS13 agent intake/review
+  switches MUST remain false. José Luis has `brief_read` only.
+- The repo remains **public** by existing owner choice: commit no
+  customer data, access tokens or secrets.
+- Before unrestricted production release, verify actual signed-in
+  human/agent E2E, recovery redirects, leaked-password protection,
+  secure backups and restore, device/mobile/a11y QA and owner approval.
+- To suspend new manual writes, set the OS10 global read-only
+  flag back to true on this preview branch and redeploy. Existing
+  records are not automatically rolled back.
 
-## Documentation
-- `docs/specs/OS-13_SUPERVISED_PROPOSALS.md` — supervised suggestion contract.
-- `docs/specs/OS-13_EXECUTION_REPORT.md` — completed OS-13 evidence.
-- `docs/specs/OS-14_RELEASE_HARDENING.md` — release hardening acceptance gates.
-- `docs/sql/OS-14_RLS_FK_HARDENING.sql` — additive SQL hardening.
-- `tests/postgres/os14_hardening.rollback.sql` — transaction-scoped checks.
+## Specs and evidence
+- `docs/specs/OS-15-01_EXECUTION_REPORT.md` — Liquid Precision integration.
+- `docs/specs/OS-16_PRIVATE_PILOT.md` — gated operational scope.
+- `docs/specs/OS-16_EXECUTION_REPORT.md` — verification and gaps.
+- `tests/postgres/os16_crm_followup.rollback.sql` — owner CRM update and audit QA.
 
-ANDRAI OS is separate from the marketing site andrai.com.mx, ZONERA,
-5TAR HOST and other client projects.
+Separate from andrai.com.mx, ZONERA, 5TAR HOST and andrai-crm.

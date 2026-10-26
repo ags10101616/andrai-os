@@ -8,4 +8,5 @@
 6. Record statuses accurately: PASS only for actual checks; PENDING/BLOCKED/NOT RUN otherwise.
 7. Enforce owner-bound membership and strict agent separation. No self-signup, arbitrary team mutations, commercial write flags or autonomous execution.
 8. Preserve Spectral Ember brand: obsidian, warm ivory, graphite, coral, Manrope-like typography.
-9. Keep the global OS10 pilot read-only switch and per-feature write gates disabled until authenticated browser E2E and release approval.
+9. Keep main and production read-only until authenticated browser E2E, recovery and release approval.
+10. Exception restricted to the explicitly owner-authorized SSO-protected `feature/os-16-private-pilot` preview: OS05/06/07/08 manual capture may be enabled with OS10 global flag false after transaction QA. Log the missing browser UAT honestly and stop on failures. This is not approval to merge to main, publish production, grant agent execution or create external effects.

@@ -1,0 +1,31 @@
+/* OS-16 / functional first use — additive to Spectral Ember Liquid Precision */
+.os16-onboarding{margin:16px 0 24px;padding:clamp(21px,3vw,34px);background:linear-gradient(110deg,#fffdf8,#f8f3ea);border:1px solid #ded8c9}
+.os16-onboarding h2{font-size:clamp(22px,2.5vw,33px);font-weight:670;letter-spacing:-.06em;line-height:1.18;margin:9px 0}
+.os16-onboarding>p{font-size:12px;color:#646b62;line-height:1.75;max-width:650px}
+.os16-first-steps{margin:25px 0 8px;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;list-style:none}
+.os16-first-steps li{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;padding:15px 16px;border:1px solid #e2ded4;border-radius:12px;background:#fffdf8;min-width:0}
+.os16-first-steps li>span{grid-row:span 2;width:30px;height:30px;border:1px solid #edc9b9;background:#fff2ec;color:#a94020;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:790}
+.os16-first-steps a{font-size:12px;font-weight:760;color:#242b25;text-decoration:none;min-width:0}
+.os16-first-steps a:hover{text-decoration:underline;text-decoration-color:#a94020;text-underline-offset:3px}
+.os16-first-steps small{font-size:10px;color:#606760;line-height:1.55;margin-top:4px}
+.os16-onboarding-foot{font-size:10px!important;line-height:1.7!important;color:#676d66!important;margin:17px 0 0!important}
+.os16-onboarding-foot a{color:#a94020;font-weight:700}
+.os16-back{margin:0 0 20px}
+.os16-back a{font-size:12px;color:#a94020;font-weight:720}
+.os16-detail-facts,.os16-feature-gates{margin:20px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.os16-detail-facts div,.os16-feature-gates div{padding:12px 0;border-bottom:1px solid #e8e4dc;min-width:0}
+.os16-detail-facts dt,.os16-feature-gates dt{font-size:10px;color:#697169;margin-bottom:8px}
+.os16-detail-facts dd,.os16-feature-gates dd{font-size:12px;font-weight:720;margin:0;overflow-wrap:anywhere}
+.os16-editor{margin-top:20px}
+.os16-editor-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;border:0;padding:24px 0 0;margin:0}
+.os16-editor-fields label{display:flex;flex-direction:column;gap:8px;font-size:11px;font-weight:750;color:#343c34;min-width:0}
+.os16-editor-fields input,.os16-editor-fields select{height:42px;width:100%;background:#fffdf9;border:1px solid #d9d9cf;border-radius:10px;padding:9px 11px;color:#202720;font-size:12px}
+.os16-editor-wide{grid-column:span 2}
+.os16-editor-fields button{align-self:end;min-height:42px}
+.os16-operational-actions{margin:22px 0 0}
+.os16-operations-panel{margin-bottom:20px}
+@media(max-width:740px){
+ .os16-first-steps,.os16-detail-facts,.os16-feature-gates{grid-template-columns:1fr}
+ .os16-editor-fields{grid-template-columns:1fr}
+ .os16-editor-wide{grid-column:auto}
+}
