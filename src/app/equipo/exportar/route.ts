@@ -19,7 +19,7 @@ const headerBase={
 };
 /**
  * Private owner-scoped operational JSON export. This is NOT a database dump
- * or a guarantee of disaster recovery. Never uses service_role.
+ * or a guarantee of disaster recovery. Uses only the authenticated, RLS-filtered per-request database client.
  */
 export async function GET():Promise<Response>{
  const member=await requireMembership('equipo');
