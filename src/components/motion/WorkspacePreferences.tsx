@@ -17,17 +17,24 @@ export function WorkspacePreferences(){
  const [osSolid,setOsSolid]=useState(false);
  const [ready,setReady]=useState(false);
  useEffect(()=>{
-  const saved=readStored();
-  setReduced(saved.motion);setSolid(saved.solid);
   const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
   const transparency=window.matchMedia('(prefers-reduced-transparency: reduce)');
   const update=()=>{
    setOsReduced(motion.matches);setOsSolid(transparency.matches);
   };
-  update();setReady(true);
+  // Read persisted browser preferences on the next animation frame, not as
+  // synchronous cascading setState calls during the initial React effect.
+  const frame=window.requestAnimationFrame(()=>{
+   const saved=readStored();
+   setReduced(saved.motion);
+   setSolid(saved.solid);
+   update();
+   setReady(true);
+  });
   motion.addEventListener('change',update);
   transparency.addEventListener('change',update);
   return ()=>{
+   window.cancelAnimationFrame(frame);
    motion.removeEventListener('change',update);
    transparency.removeEventListener('change',update);
   };
