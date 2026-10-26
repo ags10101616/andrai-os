@@ -173,12 +173,12 @@ export async function renderQuotePdf(
   rule(y+7,themeFaint);
  });
  y-=18;
- ensure(118);
+ ensure(138);
  const amountX=RIGHT-5;
  right('Subtotal',RIGHT-155,y,regular,10,themeMuted);
  right(currency(quote.subtotalMinor),amountX,y,bold,11);y-=22;
  right(quote.taxRateBps===1600?'IVA (16 %)':'IVA (0 %)',RIGHT-155,y,regular,10,themeMuted);
- right(currency(quote.taxMinor),amountX,y,bold,11);y-=22;
+ right(currency(quote.taxMinor),amountX,y,bold,11);y-=36;
  page.drawRectangle({x:RIGHT-295,y:y-19,width:295,height:40,color:themeIvory});
  right('TOTAL MXN',RIGHT-155,y,bold,10,totalInk);
  right(currency(quote.totalMinor),amountX,y-2,bold,16,totalInk);
