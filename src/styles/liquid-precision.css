@@ -386,3 +386,7 @@ html[data-lp-motion=reduce] *::after{
  .panel,.metric,.db-counter,.ops-project-card,.quote-card{box-shadow:none!important}
  .header,.db-toolbar{backdrop-filter:none}
 }
+.lp-quote-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.lp-quote-pdf-link{font-size:10px;font-weight:750;color:#a94020;display:inline-flex;align-items:center;justify-content:center;padding:10px 11px;min-height:42px;border:1px solid #e9cdbf;border-radius:10px;background:#fff5ee;white-space:nowrap;transition:transform var(--lp-micro),background var(--lp-micro)}
+.lp-quote-pdf-link:hover{background:#ffe9db;transform:translateY(-1px)}
+@media(max-width:760px){.lp-quote-actions{justify-content:flex-start}}

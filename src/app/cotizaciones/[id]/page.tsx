@@ -46,7 +46,7 @@ export default async function QuoteDetailPage({params}:{
   </div><a className="quote-download" href={'/cotizaciones/'+quote.id+'/pdf'}>
     Descargar PDF ↗</a></section>
 
-  <QuotePresentation><section className="panel quote-detail">
+  <QuotePresentation pdfHref={'/cotizaciones/'+quote.id+'/pdf'}><section className="panel quote-detail">
    <div className="lp-document-header">
     <span className="lp-document-wordmark">ANDRAI<span>.</span></span>
     <small>ESTUDIO DE SISTEMAS DIGITALES<br/>{quoteShortCode(quote.id,quote.version)} · V{quote.version}</small>

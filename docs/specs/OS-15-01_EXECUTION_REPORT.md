@@ -5,3 +5,6 @@ Scope: AppShell, RootLayout, role-authorized dashboard counts, financial summary
 Not touched: SQL, Supabase memberships, role/RLS, operational/server calculations, email, Stripe, quote PDF generation, agent permissions, OS10 and module write flags, main/production.
 No synthetic lab data are imported into business screens. Zero entries should remain zero/EmptyState.
 QA states: Node/CI and protected Vercel preview pending; signed-in UX E2E NOT RUN pending authenticated browser access. Do not label ready for operational rollout.
+
+## OS15 optional PDF scope
+Added a query-constrained Atelier template to the existing protected PDF endpoint and an on-screen download action. No new quote/version/payment data is created. The default Statement endpoint remains available. Both styles require synthetic PDF QA and visual render inspection before claiming complete approval.

@@ -27,3 +27,7 @@ Visual changes are CSS overrides in a dedicated stylesheet to keep rollback safe
 
 ## Release scope
 Preview branch only until real signed-in E2E, backup/recovery and remaining OS14 gates. Do not merge stack to main, promote production or activate writes based solely on a passing build. Revert the additive branch to restore earlier UI; no schema rollback required.
+
+## OS15 PDF additive extension
+The original PDF endpoint remains default Statement, with the same ACL and contract; `?style=atelier` selects a second static visual renderer sharing the same QuoteDetail, money in cents, status and pagination. The selected style is linked by the on-screen appearance control.
+QA requires generating and checking both styles with synthetic quotes, multi-page long lines, without mutating any business data. Default Contract PDF remains available. An authenticated browser E2E remains a separate gate.

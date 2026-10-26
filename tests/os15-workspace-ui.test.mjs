@@ -33,7 +33,7 @@ test('Finance flags and authority of money unchanged',()=>{
  assert.match(f,/AnimatedValue value=\{value\}/);
 });
 test('Quote format is presentation-only and real approval and PDF contract remain',()=>{
- for(const p of [/requireMembership\('cotizaciones'\)/,/getQuoteDetail\(id\)/,/OS07_QUOTES_WRITES_ENABLED/,/quote\.totalMinor/,/QuoteTransitionForm/,/quote\.history\.map/,/<QuotePresentation>/])assert.match(q,p);
+ for(const p of [/requireMembership\('cotizaciones'\)/,/getQuoteDetail\(id\)/,/OS07_QUOTES_WRITES_ENABLED/,/quote\.totalMinor/,/QuoteTransitionForm/,/quote\.history\.map/,/<QuotePresentation pdfHref=/])assert.match(q,p);
  assert.match(q,/\/pdf'/);
  assert.match(presentation,/aria-pressed=\{appearance==='statement'\}/);
  assert.match(presentation,/aria-pressed=\{appearance==='atelier'\}/);
@@ -67,4 +67,18 @@ test('No dependency added and original PDF arithmetic stays unchanged',()=>{
  const pdf=read('src/lib/quotes/pdf.ts');
  assert.match(pdf,/line\.unit_minor\*line\.quantity/);
  assert.match(pdf,/Esta cotización no es un CFDI/);
+});
+
+test('Style choices are constrained while server PDF route still authenticates',()=>{
+ const route=read('src/app/cotizaciones/[id]/pdf/route.ts');
+ const renderer=read('src/lib/quotes/pdf.ts');
+ assert.match(route,/getQuoteDetail\(id\)/);
+ assert.match(route,/searchParams.get\('style'\)==='atelier'/);
+ assert.match(route,/renderQuotePdf\(quote,appearance\)/);
+ assert.match(renderer,/quote\.subtotalMinor/);
+ assert.match(renderer,/quote\.taxMinor/);
+ assert.match(renderer,/quote\.totalMinor/);
+ assert.match(renderer,/export type QuotePdfAppearance='statement'\|'atelier'/);
+ assert.match(renderer,/Esta cotización no es un CFDI/);
+ assert.match(presentation,/\?style=atelier/);
 });
