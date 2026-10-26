@@ -35,7 +35,7 @@ export default async function ProspectsPage({searchParams}:{searchParams:Promise
             <caption>Oportunidades visibles según tus permisos y el filtro seleccionado</caption>
             <thead><tr><th scope="col">Cliente / oportunidad</th><th scope="col">Etapa</th><th scope="col">Importe estimado</th><th scope="col">Siguiente paso</th><th scope="col">Fecha</th></tr></thead>
             <tbody>{entries.map(entry=><tr key={entry.id}>
-              <td><strong>{entry.clientName}</strong><span>{entry.title}</span></td>
+              <td><strong><Link href={'/prospectos/'+entry.id}>{entry.clientName} ↗</Link></strong><span>{entry.title}</span></td>
               <td><span className="crm-stage-badge">{stageLabels[entry.stage]}</span></td>
               <td>{formatMxMoneyMinor(entry.amountMinor)}</td>
               <td>{entry.nextAction}</td>

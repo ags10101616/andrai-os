@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { Manrope } from 'next/font/google';
 import './globals.css';
 import '@/styles/liquid-precision.css';
+import '@/styles/private-pilot.css';
 
 const manrope = Manrope({ subsets: ['latin'], display: 'swap', variable: '--font-manrope' });
 

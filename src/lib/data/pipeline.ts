@@ -43,3 +43,38 @@ export async function loadPipeline(stage?:PipelineStage):Promise<OpportunitySumm
     nextAction:String(x.next_action),nextActionOn:String(x.next_action_on),
   }));
 }
+
+
+/** Member-scoped CRM detail; never queries using a privileged service key. */
+export interface OpportunityDetail extends OpportunitySummary {
+ clientId:string;
+ contactName:string;contactEmail:string|null;contactPhone:string|null;
+ updatedAt:string;
+}
+export async function loadOpportunityDetail(id:string,organizationId:string):Promise<OpportunityDetail|null>{
+ const db=await createServerSupabase();
+ const {data:opportunity,error}=await db.from('os_opportunities')
+  .select('id,client_id,title,stage,amount_minor,next_action,next_action_on,updated_at')
+  .eq('organization_id',organizationId).eq('id',id).maybeSingle();
+ if(error)throw new Error('Unable to load private opportunity');
+ if(!opportunity||!isPipelineStage(opportunity.stage))return null;
+ const {data:client,error:clientError}=await db.from('os_clients')
+  .select('name,contact_name,email,phone')
+  .eq('organization_id',organizationId).eq('id',opportunity.client_id).maybeSingle();
+ if(clientError)throw new Error('Unable to load private client details');
+ if(!client)return null;
+ return {
+  id:String(opportunity.id),
+  clientId:String(opportunity.client_id),
+  clientName:String(client.name),
+  contactName:String(client.contact_name??''),
+  contactEmail:typeof client.email==='string'?client.email:null,
+  contactPhone:typeof client.phone==='string'?client.phone:null,
+  title:String(opportunity.title),
+  stage:opportunity.stage,
+  amountMinor:Number(opportunity.amount_minor),
+  nextAction:String(opportunity.next_action),
+  nextActionOn:String(opportunity.next_action_on),
+  updatedAt:String(opportunity.updated_at),
+ };
+}

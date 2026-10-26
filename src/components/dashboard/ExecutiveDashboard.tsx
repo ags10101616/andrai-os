@@ -181,6 +181,25 @@ export function ExecutiveDashboard({report,tasks,followups,activity}:{
    Los indicadores de pendientes, etapas y saldos muestran la situación actual, independientemente del periodo.
   </p>
 
+  {report.role==='owner'&&sales&&projects&&
+   sales.activeOpportunities===0&&sales.quotesTotal===0&&
+   projects.active===0&&report.tasks.open===0&&
+   <section className="panel os16-onboarding" aria-labelledby="os16-start-title">
+    <div className="eyebrow">ANDRAI OS / PRIMEROS PASOS</div>
+    <h2 id="os16-start-title">Tu espacio está preparado para empezar<span className="accent">.</span></h2>
+    <p>El sistema todavía no tiene registros comerciales. Comienza registrando
+     una oportunidad real; después podrás organizar proyectos, tareas y cotizaciones.</p>
+    <ol className="os16-first-steps">
+     <li><span>01</span><Link href="/prospectos">Registrar el primer prospecto ↗</Link><small>Cliente, contacto y próximo seguimiento</small></li>
+     <li><span>02</span><Link href="/proyectos">Crear un proyecto ↗</Link><small>Asociar un cliente y una fecha de entrega</small></li>
+     <li><span>03</span><Link href="/tareas">Organizar tareas ↗</Link><small>Responsable, prioridad y vencimiento</small></li>
+     <li><span>04</span><Link href="/cotizaciones">Preparar una cotización ↗</Link><small>Conceptos, IVA y revisión interna</small></li>
+    </ol>
+    <p className="os16-onboarding-foot">
+     Los importes y estados serán los que registres realmente; no hay datos de demostración en este espacio.
+     <Link href="/equipo"> Comprobar acceso y exportación privada ↗</Link>
+    </p>
+   </section>}
   <ExecutiveMetrics r={report}/>
 
   {finance&&<SectionSurface title={'Finanzas · últimos '+report.days+' días'}
