@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import {AnimatedValue} from '@/components/motion/AnimatedValue';
+import {MotionReplay} from '@/components/motion/WorkspaceMotion';
 import { signedMoneyMXN } from '@/lib/finance/model';
 import { formatLocalDate } from '@/lib/data/ops-validation';
 import {
@@ -11,11 +13,14 @@ import type {
 import { EmptyState } from '@/components/ui/EmptyState';
 import { SectionSurface } from '@/components/ui/SectionSurface';
 
-function Counter({label,value,description,href}:{
- label:string;value:string;description:string;href:string;
+function Counter({label,value,description,href,mode='count'}:{
+ label:string;value:number;description:string;href:string;mode?:'count'|'money';
 }){
+ const display=mode==='money'?signedMoneyMXN(value):value.toLocaleString('es-MX');
  return <Link className="db-counter" href={href}>
-   <small>{label}</small><strong>{value}</strong><span>{description}</span>
+   <small>{label}</small>
+   <strong><AnimatedValue value={value} display={display} mode={mode}/></strong>
+   <span>{description}</span>
  </Link>;
 }
 function Breakdown({points,labels,ariaLabel}:{
@@ -95,37 +100,37 @@ function ExecutiveMetrics({r}: {r:ExecutiveReport}){
  const t=r.tasks;
  if(r.role==='production'&&r.operations){
   return <section className="db-metrics" aria-label="Indicadores operativos del rol Producción">
-   <Counter label="Proyectos a cargo" value={String(r.operations.active)}
+   <Counter label="Proyectos a cargo" value={r.operations.active}
     description="Activos, todos los periodos" href="/proyectos"/>
-   <Counter label="Tareas propias abiertas" value={String(t.open)}
+   <Counter label="Tareas propias abiertas" value={t.open}
     description="Pendientes actuales" href="/tareas"/>
-   <Counter label="Entregables abiertos" value={String(t.openDeliverables)}
+   <Counter label="Entregables abiertos" value={t.openDeliverables}
     description="Requieren una entrega" href="/tareas"/>
-   <Counter label="Tareas vencidas" value={String(t.overdue)}
+   <Counter label="Tareas vencidas" value={t.overdue}
     description="Asignadas a ti" href="/tareas"/>
   </section>;
  }
  if(r.role==='sales'&&r.sales){
   return <section className="db-metrics" aria-label="Indicadores comerciales">
-   <Counter label="Oportunidades activas" value={String(r.sales.activeOpportunities)}
+   <Counter label="Oportunidades activas" value={r.sales.activeOpportunities}
     description="Pipeline actual" href="/prospectos"/>
-   <Counter label="Nuevas en el periodo" value={String(r.sales.newInPeriod)}
+   <Counter label="Nuevas en el periodo" value={r.sales.newInPeriod}
     description={'Últimos '+r.days+' días'} href="/prospectos"/>
-   <Counter label="Seguimientos vencidos" value={String(r.sales.overdueFollowups)}
+   <Counter label="Seguimientos vencidos" value={r.sales.overdueFollowups}
     description="Oportunidades abiertas" href="/prospectos"/>
-   <Counter label="Cotizaciones en revisión" value={String(r.sales.quotesInReview)}
+   <Counter label="Cotizaciones en revisión" value={r.sales.quotesInReview}
     description="Esperando decisión" href="/cotizaciones"/>
   </section>;
  }
  if(r.role==='owner'&&r.sales&&r.operations&&r.finance){
   return <section className="db-metrics" aria-label="Indicadores ejecutivos de Dirección">
-   <Counter label="Oportunidades activas" value={String(r.sales.activeOpportunities)}
+   <Counter label="Oportunidades activas" value={r.sales.activeOpportunities}
     description="Pipeline actual" href="/prospectos"/>
-   <Counter label="Proyectos activos" value={String(r.operations.active)}
+   <Counter label="Proyectos activos" value={r.operations.active}
     description="Todo el equipo" href="/proyectos"/>
-   <Counter label="Tareas vencidas" value={String(t.overdue)}
+   <Counter label="Tareas vencidas" value={t.overdue}
     description="Todo el equipo" href="/tareas"/>
-   <Counter label="Saldo comercial pendiente" value={signedMoneyMXN(r.finance.acceptedOpenMinorAll)}
+   <Counter label="Saldo comercial pendiente" value={r.finance.acceptedOpenMinorAll} mode="money"
     description="Aceptadas · registro manual" href="/finanzas"/>
   </section>;
  }
@@ -164,9 +169,12 @@ export function ExecutiveDashboard({report,tasks,followups,activity}:{
      </Link>)}
     </nav>
    </div>
-   <Link className="db-export" href={'/resumen/reporte.csv?days='+report.days}>
+   <div style={{display:'flex',alignItems:'center',gap:9,flexWrap:'wrap'}}>
+    <MotionReplay/>
+    <Link className="db-export" href={'/resumen/reporte.csv?days='+report.days}>
      Exportar CSV <span aria-hidden="true">↗</span>
-   </Link>
+    </Link>
+   </div>
   </div>
   <p className="db-period-note">
    Actividad del <strong>{formatLocalDate(report.start)}</strong> al <strong>{formatLocalDate(report.end)}</strong>.
@@ -185,7 +193,7 @@ export function ExecutiveDashboard({report,tasks,followups,activity}:{
        ['Devoluciones registradas',finance.refundsInPeriodMinor],
        ['Movimiento neto',finance.netInPeriodMinor],
       ] as [string,number][]).map(([label,value])=><div key={label}>
-       <small>{label}</small><strong>{signedMoneyMXN(value)}</strong>
+       <small>{label}</small><strong><AnimatedValue value={value} display={signedMoneyMXN(value)} mode="money"/></strong>
       </div>)}
     </div>
     <p className="db-caveat">
