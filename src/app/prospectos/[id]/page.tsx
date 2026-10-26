@@ -5,7 +5,7 @@ import {AppShell} from '@/components/AppShell';
 import {OpportunityUpdateForm} from '@/components/crm/OpportunityUpdateForm';
 import {requireMembership} from '@/lib/auth/session';
 import {isPilotReadOnly} from '@/lib/release/gates';
-import {loadOpportunityDetail,stageLabels} from '@/lib/data/pipeline';
+import {loadOpportunityDetail,stageLabels,pipelineStages} from '@/lib/data/pipeline';
 import {isUuid} from '@/lib/data/ops-validation';
 import {formatMxMoneyMinor} from '@/lib/data/money';
 
@@ -41,6 +41,7 @@ export default async function OpportunityDetailPage({params}:{params:Promise<{id
     <div><dt>Importe estimado</dt><dd>{formatMxMoneyMinor(opportunity.amountMinor)}</dd></div>
    </dl>
   </section>
-  <OpportunityUpdateForm key={opportunity.updatedAt} opportunity={opportunity} enabled={enabled}/>
+  <OpportunityUpdateForm key={opportunity.updatedAt} opportunity={opportunity} enabled={enabled}
+   stages={pipelineStages.map(value=>({value,label:stageLabels[value]}))}/>
  </AppShell>;
 }

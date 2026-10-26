@@ -2,13 +2,14 @@
 import {useActionState,useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 import {updateOpportunityAction,type OpportunityUpdateState} from '@/app/prospectos/actions';
-import {pipelineStages,stageLabels,type OpportunityDetail} from '@/lib/data/pipeline';
+import type {OpportunityDetail} from '@/lib/data/pipeline';
 
 const initial:OpportunityUpdateState={kind:'idle',message:''};
 
 /** No optimistic business writes: save feedback is returned from server/RLS first. */
-export function OpportunityUpdateForm({opportunity,enabled}:{
+export function OpportunityUpdateForm({opportunity,enabled,stages}:{
  opportunity:OpportunityDetail;enabled:boolean;
+ stages:{value:string;label:string}[];
 }){
  const [state,action,pending]=useActionState(updateOpportunityAction,initial);
  const router=useRouter();
@@ -27,7 +28,7 @@ export function OpportunityUpdateForm({opportunity,enabled}:{
    <fieldset disabled={!enabled||pending} className="os16-editor-fields">
     <label>Etapa comercial
      <select name="stage" defaultValue={opportunity.stage} required>
-      {pipelineStages.map(stage=><option key={stage} value={stage}>{stageLabels[stage]}</option>)}
+      {stages.map(stage=><option key={stage.value} value={stage.value}>{stage.label}</option>)}
      </select>
     </label>
     <label>Valor estimado (MXN)
