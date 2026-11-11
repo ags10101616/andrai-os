@@ -1,24 +1,26 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextRequest, NextResponse } from 'next/server';
-import { isWorkspacePath } from '@/lib/auth/roles';
+import { isWorkspacePath, shouldRefreshAuthPath } from '@/lib/auth/roles';
 
 /**
- * Refresh cookies for authenticated workspace pages. This is a UX gate only:
- * secure authorization is rechecked in the server-side data access layer
- * and then enforced again by Supabase RLS.
+ * Refresh cookies on workspace AND session-aware entry/recovery pages.
+ * Entry pages are public: a missing session must reach their normal login flow.
+ * Authorization is still enforced server-side and by Supabase RLS.
  */
 export async function proxy(request: NextRequest) {
-  if (!isWorkspacePath(request.nextUrl.pathname)) {
-    return NextResponse.next();
-  }
+  const pathname = request.nextUrl.pathname;
+  if (!shouldRefreshAuthPath(pathname)) return NextResponse.next();
+  const protectedWorkspace = isWorkspacePath(pathname);
+
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) {
     return new NextResponse('Workspace temporarily unavailable', {
       status: 503,
-      headers: { 'Cache-Control': 'no-store' },
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' },
     });
   }
+
   let response = NextResponse.next({ request });
   const db = createServerClient(url, key, {
     cookies: {
@@ -26,20 +28,27 @@ export async function proxy(request: NextRequest) {
         return request.cookies.getAll();
       },
       setAll(items) {
+        // Propagate refreshed session to this request's Server Components.
         items.forEach(({ name, value }) => request.cookies.set(name, value));
         response = NextResponse.next({ request });
+        // And persist the refreshed cookies in the browser.
         items.forEach(({ name, value, options }) => {
           response.cookies.set(name, value, options);
         });
       },
     },
   });
-  // getClaims is not a substitute for an authoritative membership DB check.
+
+  // Signature verification is a UX gate, not an authorization or membership check.
   const { data, error } = await db.auth.getClaims();
-  if (error || !data?.claims) {
-    const destination = new URL('/login', request.url);
-    return NextResponse.redirect(destination);
+  if (protectedWorkspace && (error || !data?.claims)) {
+    const redirected = NextResponse.redirect(new URL('/login', request.url));
+    // Preserve any session-clearing cookies generated during the check.
+    response.cookies.getAll().forEach(cookie => redirected.cookies.set(cookie));
+    redirected.headers.set('Cache-Control', 'private, no-store, max-age=0');
+    return redirected;
   }
+  response.headers.set('Cache-Control', 'private, no-store, max-age=0');
   return response;
 }
 
