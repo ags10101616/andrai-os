@@ -31,8 +31,10 @@ test('Nested workspace paths refresh Auth in the proxy',()=>{
  assert.equal(isWorkspacePath('/diagnostico-acceso'),false);
  assert.equal(isWorkspacePath('/finanzas/../../other'),false);
 });
-test('Sign-in directs to a separate server-authorized diagnostics page',()=>{
- assert.match(read('src/lib/auth/actions.ts'),/redirect\('\/diagnostico-acceso'\)/);
+test('Sign-in goes through the verified entry and preserves access diagnostics',()=>{
+ assert.match(read('src/lib/auth/actions.ts'),/redirect\('\/entrada'\)/);
+ assert.match(read('src/app/entrada/page.tsx'),/await resolveWorkspaceLanding\(\)/);
+ assert.match(read('src/lib/auth/entry.ts'),/await resolveSession\(\)/);
  assert.match(read('src/app/diagnostico-acceso/page.tsx'),/await resolveSession\(\)/);
  assert.match(read('src/lib/auth/session.ts'),/bound_user_id !== user\.id/);
  assert.match(read('docs/sql/OS-10_STRICT_MEMBER_BINDING.sql'),/s\.bound_user_id=u\.id/);
