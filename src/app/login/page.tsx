@@ -1,7 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { resolveWorkspaceLanding } from '@/lib/auth/entry';
 import { signInWithPassword } from '@/lib/auth/actions';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 export const metadata: Metadata = { title: 'Acceso privado' };
 
 export default async function LoginPage({
@@ -10,6 +14,9 @@ export default async function LoginPage({
   searchParams: Promise<{ error?: string; reset?: string }>;
 }) {
   const { error, reset } = await searchParams;
+  const landing = await resolveWorkspaceLanding();
+  if (landing === 'resumen') redirect('/resumen');
+  if (landing === 'agente') redirect('/agente');
   return <main className="auth-page">
     <section className="auth-brand">
       <div className="auth-wordmark">ANDRAI<span>.</span></div>

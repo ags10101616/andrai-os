@@ -38,6 +38,18 @@ export function isWorkspacePath(pathname: string): boolean {
     && (isSection(segments[0]) || segments[0] === 'agente');
 }
 
+/** Auth token refresh is also needed before rendering entry/recovery Server Components.
+ * Do not treat these public entry routes as protected workspaces.
+ */
+const sessionEntryPaths: ReadonlySet<string> = new Set([
+  '/', '/entrada', '/login', '/diagnostico-acceso',
+  '/acceso-restringido', '/restablecer-contrasena',
+]);
+
+export function shouldRefreshAuthPath(pathname: string): boolean {
+  return isWorkspacePath(pathname) || sessionEntryPaths.has(pathname);
+}
+
 export const roleLabels: Readonly<Record<TeamRole, string>> = {
   owner: 'Dirección',
   sales: 'Comercial',
