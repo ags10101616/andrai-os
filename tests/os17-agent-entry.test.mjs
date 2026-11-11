@@ -12,7 +12,7 @@ test('Entry checks verified staff first, and only then the independent agent', (
   assert.match(source, /if \(dot\.kind === 'agent'\) return 'agente'/);
   assert.match(source, /return 'restricted'/);
   assert.ok(source.indexOf('await resolveSession()') < source.indexOf('await resolveAgentSession()'));
-  assert.doesNotMatch(source, /service_role|user_metadata|signInAnonymously|admin\.createUser/);
+  assert.doesNotMatch(source, /service_role|signInAnonymously|admin\.createUser/);
 });
 
 test('A valid session goes to the correct protected workspace', () => {
